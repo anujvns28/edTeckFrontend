@@ -7,6 +7,9 @@ import banner from "../assets/Images/banner.mp4"
 import CodeBlock from '../component/core/homePage/CodeBlock'
 import Footer from '../component/common/Footer'
 import ExploreMore from '../component/core/homePage/ExploreMore'
+import TimelineSection from '../component/core/homePage/TimelineSection'
+import LearningLanguageSection from '../component/core/homePage/LearningLanguageSection'
+import InstructorSection from '../component/core/homePage/InstructorSection'
 
 const Home = () => {
     return (
@@ -139,7 +142,7 @@ const Home = () => {
                     </div>
                 </div>
 
-                <div className='flex flex-row justify-between py-12 gap-8 w-11/12 max-w-maxContent mx-auto'>
+                <div className='flex flex-row justify-between py-12 mb-9 gap-8 w-11/12 max-w-maxContent mx-auto'>
                   <div className='text-4xl font-semibold w-[45%]'>
                   Get the skills you need for a <HighlightText text={"job that is in demand."}/>
                   </div>
@@ -154,7 +157,12 @@ const Home = () => {
                   </div>
                 </div>
 
+                <TimelineSection/>
+
+                <LearningLanguageSection/>
             </div>
+            
+            <InstructorSection/>
 
             <Footer />
         </div>
