@@ -11,8 +11,9 @@ const ExploreMore = () => {
     const handleCurrentTAb = (tab,courses) => {
       setCurrentTab(tab);
       setCurrentTabCourse(courses)
+     
     }
-
+    console.log(currentTabCourse)
     return (
         <div className='text-white pb-52 relative w-11/12 max-w-maxContent mx-auto'>
             <div className="text-4xl font-semibold text-center my-10">
@@ -35,7 +36,11 @@ const ExploreMore = () => {
             <div className='absolute flex flex-row justify-between translate-y-14'>
                 {
                     currentTabCourse.map((course) => {
-                        return <CourseCard cardData={course} currentCard={currentCard} setCurrentCard={setCurrentCard}/>
+                        return <CourseCard 
+                        cardData={course} 
+                        currentCard={currentCard} 
+                        setCurrentCard={setCurrentCard}
+                        />
                     })
                 }
             </div>

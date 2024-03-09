@@ -4,7 +4,8 @@ import React from "react";
 import { HiUsers } from "react-icons/hi";
 import { ImTree } from "react-icons/im";
 
-const CourseCard = ({cardData, currentCard,setCurrentCard}) => {
+const CourseCard = ({cardData, currentCard,setCurrentCard,setCurrentTabCourse}) => {
+  
   return (
     <div
       className={`w-[360px]  lg:w-[30%]  text-richblack-25 h-[300px] box-border cursor-pointer ${currentCard == cardData ? 
