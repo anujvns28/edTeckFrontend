@@ -13,7 +13,7 @@ import InstructorSection from '../component/core/homePage/InstructorSection'
 
 const Home = () => {
     return (
-        <div className='w-full h-full'>
+        <div className='w-full h-full '>
             {/* section 1 */}
             <div className='mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between  text-white '>
                 {/* become insturctor button */}
