@@ -1,8 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { login } from '../../../service/operation/Auth';
+import { useNavigate } from 'react-router-dom';
 
 const LoginFrom = () => {
+  const [formData,setFormData] = useState();
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+     [ e.target.name] : e.target.value
+    }))
+  }
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    console.log("Calling....")
+    login(formData,navigate);
+  }
+
   return (
     <form 
+    onSubmit={handleSubmit}
     className="mt-6 flex w-full flex-col gap-y-4"
     >
         <label className='w-full'>
@@ -10,9 +29,13 @@ const LoginFrom = () => {
                 Email Address <sup className="text-pink-200">*</sup>
             </p>
             <input
+            required
             placeholder='Enter Email Address'
             className='w-full rounded-lg bg-richblack-700 p-3 text-[16px] leading-[24px] text-richblack-5 shadow-[0_1px_0_0]
              shadow-white/50 placeholder:text-richblack-400 focus:outline-none'
+             name='email'
+             onChange={handleChange}
+             type='email'
             />
         </label>
 
@@ -21,9 +44,13 @@ const LoginFrom = () => {
                 Password <sup className="text-pink-200">*</sup>
             </p>
             <input
+            required
             placeholder='Enter Password'
             className='w-full rounded-lg bg-richblack-700 p-3 text-[16px] leading-[24px] text-richblack-5 shadow-[0_1px_0_0]
              shadow-white/50 placeholder:text-richblack-400 focus:outline-none'
+             name='password'
+             onChange={handleChange}
+             type='password'
             />
         </label>
 
