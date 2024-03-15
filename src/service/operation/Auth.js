@@ -1,7 +1,8 @@
-import { toast } from "react-toastify";
+
 import {apiConnector} from "../apiConnector"
 import { useDispatch } from "react-redux";
 import { setToken } from "../../slices/authSlice";
+import toast from "react-hot-toast";
 
 const {authEndPoinds} = require("../api");
 const setLoading = false
@@ -15,10 +16,8 @@ const {
 } = authEndPoinds
 
 
-export function sendOtp(email, navigate) {
-    return async (dispatch) => {
+export async function sendOtp(email, navigate) {
       const toastId = toast.loading("Loading...")
-      dispatch(setLoading(true))
       try {
         const response = await apiConnector("POST", SENDOTP_API, {
           email,
@@ -38,10 +37,9 @@ export function sendOtp(email, navigate) {
         console.log("SENDOTP API ERROR............", error)
         toast.error("Could Not Send OTP")
       }
-      dispatch(setLoading(false))
       toast.dismiss(toastId)
     }
-  }
+  
   
   export function signUp(
     accountType,

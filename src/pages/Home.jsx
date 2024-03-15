@@ -10,8 +10,12 @@ import ExploreMore from '../component/core/homePage/ExploreMore'
 import TimelineSection from '../component/core/homePage/TimelineSection'
 import LearningLanguageSection from '../component/core/homePage/LearningLanguageSection'
 import InstructorSection from '../component/core/homePage/InstructorSection'
+import { useSelector } from 'react-redux'
 
 const Home = () => {
+    const {signupData} = useSelector((state) => state.auth);
+
+    console.log(signupData,"pringing signhp data")
     return (
         <div className='w-full h-full '>
             {/* section 1 */}

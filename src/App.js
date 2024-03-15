@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Navbar from './component/common/Navbar';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
+import VeryfiEmail from './pages/VeryfiEmail';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path='/' element={<Home/>}/>
       <Route path='/login' element={<Login/>} />
       <Route path='/signup' element={<Signup/>} />
+      <Route path='/veryfiEmail' element={<VeryfiEmail/>} />
      </Routes>
     </div>
   );

@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import rootReducer from './reducer';
-import { ToastContainer, toast } from 'react-toastify';
+import { Toaster } from 'react-hot-toast';
 
 export const store = configureStore({
   reducer: rootReducer,
@@ -17,7 +17,7 @@ root.render(
   <BrowserRouter>
   <Provider store={store}>
   <App />
-  <ToastContainer/>
+  <Toaster/>
   </Provider>
   </BrowserRouter>
 );

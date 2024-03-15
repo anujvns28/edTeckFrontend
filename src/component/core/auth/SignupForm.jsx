@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import Tab from './Tab';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { setSignupData } from '../../../slices/authSlice';
+import { sendOtp } from '../../../service/operation/Auth';
 
 const SignupForm = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [tab,setTab] = useState("Student");
   const [formData,setFormData] = useState({
     firstName:"",
@@ -23,7 +31,15 @@ const SignupForm = () => {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log(formData)
+   
+    if(formData.password !== formData.confirmPassword){
+      toast.error("Password not matched")
+      return
+    }
+
+    dispatch(setSignupData(formData));
+    sendOtp(formData.email,navigate);
+    console.log(formData,'this is form data')
   }
 
   useEffect(() => {
@@ -32,6 +48,7 @@ const SignupForm = () => {
     accountType:tab
    }))
   },[tab])
+
 
   return (
    <div className='w-full h-full'>
