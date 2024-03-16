@@ -13,9 +13,12 @@ import InstructorSection from '../component/core/homePage/InstructorSection'
 import { useSelector } from 'react-redux'
 
 const Home = () => {
-    const {signupData} = useSelector((state) => state.auth);
+    const {token} = useSelector((state) => state.auth);
+    const {user} = useSelector((state) => state.profile);
 
-    console.log(signupData,"pringing signhp data")
+    console.log(token,user,"printing.....")
+
+    
     return (
         <div className='w-full h-full '>
             {/* section 1 */}

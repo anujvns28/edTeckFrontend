@@ -21,7 +21,7 @@ const VeryfiEmail = () => {
             otp:otp
         }
 
-        signUp(data,navigate)
+        signUp(data,navigate,dispatch)
         console.log(otp)
     }
     

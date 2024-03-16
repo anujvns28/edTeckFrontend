@@ -5,6 +5,8 @@ import Navbar from './component/common/Navbar';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import VeryfiEmail from './pages/VeryfiEmail';
+import ForgotPassword from './pages/ForgotPassword';
+import UpdatePassword from './pages/UpdatePassword';
 
 function App() {
   return (
@@ -14,7 +16,9 @@ function App() {
       <Route path='/' element={<Home/>}/>
       <Route path='/login' element={<Login/>} />
       <Route path='/signup' element={<Signup/>} />
-      <Route path='/veryfiEmail' element={<VeryfiEmail/>} />
+      <Route path='/verify-email' element={<VeryfiEmail/>} />
+      <Route path='/forgot-password' element={<ForgotPassword/>} />
+      <Route path='update-password/:token' element={<UpdatePassword/>} />
      </Routes>
     </div>
   );
