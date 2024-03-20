@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from "react"
 import CountryCode from "../../../data/countrycode.json"
+import { useForm } from "react-hook-form"
 
 
 const ContactUsForm = () => {
   const [loading, setLoading] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    formState:{ errors }
+
+  } = useForm();
   
+  
+  const formSubmit = (e) => {
+      e.preventDefault();
+      console.log(e,"priigin e")
+  }
 
   
   return (
-    <form
+    <form onSubmit={handleSubmit(formSubmit)}
       className="flex flex-col gap-7"
     >
       <div className="flex flex-col gap-5 lg:flex-row">
@@ -22,7 +34,12 @@ const ContactUsForm = () => {
             id="firstname"
             placeholder="Enter first name"
             className="form-style"
+            {...register("firstname",{required:true})}
           />
+          { errors.firstname &&
+           <span className="-mt-1 text-[12px] text-yellow-100">
+           Please enter your name.
+         </span>}
          
         </div>
         <div className="flex flex-col gap-2 lg:w-[48%]">
@@ -35,7 +52,14 @@ const ContactUsForm = () => {
             id="lastname"
             placeholder="Enter last name"
             className="form-style"
+            {...register("lastname",{required:true})}
           />
+          {
+            errors.lastname &&
+            <span className="-mt-1 text-[12px] text-yellow-100">
+              Please enter your last name.
+            </span>
+          }
         </div>
       </div>
 
@@ -49,7 +73,14 @@ const ContactUsForm = () => {
           id="email"
           placeholder="Enter email address"
           className="form-style"
+          {...register("email",{required:true})}
         />
+        {
+          errors.email && 
+          <span className="-mt-1 text-[12px] text-yellow-100">
+              Please enter your email.
+          </span>
+        }
       </div>
 
       <div className="flex flex-col gap-2">
@@ -65,6 +96,7 @@ const ContactUsForm = () => {
               id="firstname"
               placeholder="Enter first name"
               className="form-style"
+              {...register("countrycode", { required: true })}
             >
               {CountryCode.map((ele, i) => {
                 return (
@@ -82,7 +114,22 @@ const ContactUsForm = () => {
               id="phonenumber"
               placeholder="12345 67890"
               className="form-style"
+              {...register("phonenumber",{
+                required:{
+                  value:true,
+                  message:"Pleace Enter your Phone number"
+                },
+                maxLength:{value:12,message:"Invalled Phone number"},
+                minLength:{value:10,message:"Invalled Phone number"}
+                })}
             />
+            {
+              errors.phonenumber && 
+               <span className="-mt-1 text-[12px] text-yellow-100">
+                {errors.phonenumber.message}
+            </span>
+
+            }
           </div>
         </div>
       </div>
@@ -98,7 +145,14 @@ const ContactUsForm = () => {
           rows="7"
           placeholder="Enter your message here"
           className="form-style"
+          {...register("message",{required:true})}
         />
+        {
+          errors.message && 
+          <span className="-mt-1 text-[12px] text-yellow-100">
+              Please enter message.
+            </span>
+        }
       </div>
 
       <button
