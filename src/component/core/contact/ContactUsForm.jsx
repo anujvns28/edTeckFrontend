@@ -8,15 +8,24 @@ const ContactUsForm = () => {
   const {
     register,
     handleSubmit,
-    formState:{ errors }
-
+    formState:{ errors,isSubmitSuccessful },
+    reset
   } = useForm();
   
   
-  const formSubmit = (e) => {
-      e.preventDefault();
-      console.log(e,"priigin e")
+  const formSubmit = (data) => {
+      console.log(data,"priigin e")
   }
+
+  useEffect(() => {
+    reset({
+      email:"",
+      firstname:"",
+      lastname:"",
+      phonenumber:"",
+      message:""
+    })
+  },[isSubmitSuccessful]);
 
   
   return (
