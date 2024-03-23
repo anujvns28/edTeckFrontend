@@ -83,6 +83,7 @@ export async function sendOtp(email, navigate) {
         dispatch(setToken(response.data.token))
         dispatch(setProfile(response.data.user))
         localStorage.setItem("token",JSON.stringify(response.data.token))
+        localStorage.setItem("user",JSON.stringify(response.data.user))
 
       } catch (error) {
         console.log("LOGIN API ERROR............", error)

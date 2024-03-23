@@ -4,6 +4,7 @@ import { Link, matchPath, useLocation } from 'react-router-dom'
 import { NavbarLinks } from "../../data/navbar-links"
 import { useSelector } from 'react-redux'
 import { BsChevronDown } from "react-icons/bs"
+import ProfileDropdown from '../core/auth/ProfileDropdown'
 
 const Navbar = () => {
 
@@ -107,6 +108,8 @@ const Navbar = () => {
               </button>
             </Link>
           )}
+
+          {token && <ProfileDropdown/>}
         </div>
 
       </div>
