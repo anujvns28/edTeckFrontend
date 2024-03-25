@@ -11,6 +11,9 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
 import MyProfile from './component/core/dashboard/MyProfile';
+import EnrolledCourses from './component/core/dashboard/EnrolledCourses';
+import Cart from './component/core/dashboard/Cart';
+import Setting from './component/core/dashboard/Setting';
 
 
 function App() {
@@ -29,6 +32,9 @@ function App() {
 
       <Route element={<Dashboard/>} >
       <Route path='/dashboard/My-profile' element={<MyProfile/>} />
+      <Route path='/dashboard/enrolled-courses' element={<EnrolledCourses/>} />
+      <Route path='/dashboard/cart' element={<Cart/>} />
+      <Route path='/dashboard/settings' element={<Setting/>} />
     
       </Route>
      </Routes>

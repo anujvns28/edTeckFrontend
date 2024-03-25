@@ -136,5 +136,17 @@ export async function sendOtp(email, navigate) {
         }
         toast.dismiss(toastId)
       }
+
+
+export const logout = (dispatch,navigate) => {
+const toastId = toast.loading("loading..")
+localStorage.removeItem("token");
+localStorage.removeItem("user");
+dispatch(setToken(null))
+dispatch(setToken(null))
+navigate("/")
+toast.dismiss(toastId)
+toast.success("Logout Successfully")
+}      
     
   

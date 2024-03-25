@@ -2,11 +2,14 @@ import React, { useRef, useState } from 'react'
 import {AiOutlineCaretDown} from "react-icons/ai"
 import {VscSignOut} from "react-icons/vsc"
 import {VscDashboard} from "react-icons/vsc"  
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom';
+import { logout } from '../../../service/operation/Auth'
 
 const ProfileDropdown = () => {
     const {user} = useSelector((state) => state.profile);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const openRef = useRef();
 
     const [open,setOpen] = useState(false);
@@ -41,8 +44,7 @@ const ProfileDropdown = () => {
             </div>
           </Link>
           <div
-            onClick={() => {
-            }}
+            onClick={() =>logout(dispatch,navigate)}
             className="flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25"
           >
             <VscSignOut className="text-lg" />
