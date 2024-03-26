@@ -1,14 +1,14 @@
 import React from 'react'
 
-const IconButton = ({text,active,handlear}) => {
+const IconButton = ({text,active,handlear,children,type}) => {
   return (
-    <button onClick={handlear}
+    <button onClick={handlear} type={type}
       className={`flex items-center cursor-pointer gap-x-2 rounded-md py-2 px-5 font-semibold text-richblack-900 
       ${
         !active ? "bg-richblack-200" : "bg-yellow-50"
       }`}
     >
-       {text}
+       {text} {children}
     </button>
   )
 }

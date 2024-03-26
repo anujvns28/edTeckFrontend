@@ -13,7 +13,7 @@ import Dashboard from './pages/Dashboard';
 import MyProfile from './component/core/dashboard/MyProfile';
 import EnrolledCourses from './component/core/dashboard/EnrolledCourses';
 import Cart from './component/core/dashboard/Cart';
-import Setting from './component/core/dashboard/Setting';
+import Setting from './component/core/dashboard/setting/Setting';
 
 
 function App() {
