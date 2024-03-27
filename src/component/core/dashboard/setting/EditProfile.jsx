@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form"
 import IconButton from "../../../common/IconButton"
 import { useNavigate } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { updateProfile } from "../../../../service/operation/Profile";
 
 
 export default function EditProfile() {
@@ -14,10 +15,20 @@ export default function EditProfile() {
 
     } = useForm()
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleForm = async(data) => {
+     const profileData = {
+      ...data,
+      userId:user._id
+     }
+
+     await updateProfile(profileData,navigate,dispatch)
+    }
  
   return (
     <>
-      <form >
+      <form onSubmit={handleSubmit(handleForm)}>
         {/* Profile Information */}
         <div className="my-10 flex flex-col gap-y-6 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-8 px-12">
           <h2 className="text-lg font-semibold text-richblack-5">
@@ -35,7 +46,7 @@ export default function EditProfile() {
                 placeholder="Enter first name"
                 className="form-style"
                 defaultValue={user?.firstName}
-
+                {...register("firstName",{required:true})}
               />
               {errors.firstName && (
                 <span className="-mt-1 text-[12px] text-yellow-100">
@@ -55,6 +66,7 @@ export default function EditProfile() {
                 placeholder="Enter first name"
                 className="form-style"
                 defaultValue={user?.lastName}
+                {...register("lastName",{required:true})}
               />
               {errors.lastName && (
                 <span className="-mt-1 text-[12px] text-yellow-100">
@@ -75,6 +87,7 @@ export default function EditProfile() {
                 id="dateOfBirth"
                 className="form-style"
                 defaultValue={user?.additionalDetails?.dateOfBirth}
+                {...register("dateOfBirth",{required:true})}
               />
               {errors.dateOfBirth && (
                 <span className="-mt-1 text-[12px] text-yellow-100">
@@ -91,7 +104,8 @@ export default function EditProfile() {
                 name="gender"
                 id="gender"
                 className="form-style"
-                 defaultValue={user?.additionalDetails?.gender}
+                defaultValue={user?.additionalDetails?.gender}
+                {...register("gender",{required:true})}
               >
                 {genders.map((ele, i) => {
                   return (
@@ -121,10 +135,15 @@ export default function EditProfile() {
                 placeholder="Enter Contact Number"
                 className="form-style"
                 defaultValue={user?.additionalDetails?.contactNumber}
+                {...register("contactNumber",{
+                  required:{value:true,message:"Phone Number Is Required"},
+                  minLength:{value:10,message:"Invallied Phone Number"},
+                  maxLength:{value:12,message:"Invallied Phone Number"}
+                })}
                 />
               {errors.contactNumber && (
                 <span className="-mt-1 text-[12px] text-yellow-100">
-                  Enter Phone number
+                  {errors.contactNumber.message}
                 </span>
               )}
             </div>
@@ -139,6 +158,7 @@ export default function EditProfile() {
                 placeholder="Enter Bio Details"
                 className="form-style"
                 defaultValue={user?.additionalDetails?.about}
+                {...register("about",{required:true})}
               />
               {errors.about && (
                 <span className="-mt-1 text-[12px] text-yellow-100">
