@@ -25,13 +25,67 @@ export const updateProfile = async(data,navigate,dispatch) => {
       }
 
       toast.success("Profile Updated successfully")
-      localStorage.setItem("user",response.data.data)
-      dispatch(setProfile(response.data.data))
+      
+      localStorage.setItem("user",JSON.stringify(response.data.updatedUserDetails))
+      dispatch(setProfile(response.data.updatedUserDetails))
       
       navigate("/dashboard/my-profile")
     } catch (error) {
       console.log("Update profile API ERROR............", error)
       toast.error("Something Went Wrong")
+    }
+    toast.dismiss(toastId)
+  }
+
+
+  export const updateProfileImg = async(data,navigate,dispatch,setLoading) => {
+    const toastId = toast.loading("Loading...")
+    setLoading(true)
+    try {
+      const response = await apiConnector("PUT", UPDATE_DISPLAY_PICTURE_API, 
+        data,{
+          "Content-Type": "multipart/form-data",
+        }
+      )
+      console.log("Update Profile Img API RESPONSE............", response)
+
+      if (!response.data.success) {
+        throw new Error(response.data.message)
+      }
+
+      toast.success("Profile Image Updated successfully")
+      
+      localStorage.setItem("user",JSON.stringify(response.data.data))
+      dispatch(setProfile(response.data.data))
+      
+      navigate("/dashboard/my-profile")
+    } catch (error) {
+      console.log("Update profile image API ERROR............", error)
+      toast.error("Something Went Wrong")
+    }
+    toast.dismiss(toastId)
+    setLoading(false)
+  }
+
+  export const updatePassword = async(data,navigate,) => {
+    const toastId = toast.loading("Loading...")
+    let response
+    try {
+       response = await apiConnector("POST", CHANGE_PASSWORD_API, 
+        data
+      )
+      console.log("Update Password API RESPONSE............", response)
+
+      if (!response.data.success) {
+        throw new Error(response.data.message)
+      }
+
+      toast.success("Password Updated successfully")
+      
+      navigate("/dashboard/my-profile")
+    } catch (error) {
+      console.log("Update Password API ERROR............", error)
+      toast.error(error.response.data.message)
     }
     toast.dismiss(toastId)
   }

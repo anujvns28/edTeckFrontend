@@ -3,21 +3,36 @@ import IconButton from "../../../common/IconButton"
 import { useForm } from "react-hook-form"
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
 import { useSelector } from "react-redux"
+import { useState } from "react"
+import { updatePassword } from "../../../../service/operation/Profile"
 
 export default function UpdatePassword() {
   const { token } = useSelector((state) => state.auth)
   const navigate = useNavigate()
+  const [showNewPassword,setShowNewPassword] = useState(false);
+  const [showOldPassword,setShowOldPassword] = useState(false);
+
+  const {user} = useSelector((state) => state.profile)
+
   const {
     register,
     handleSubmit,
     formState:{errors}
   } = useForm();
-  let showOldPassword
-  let showNewPassword
- 
+
+  const formSubmit = async(data) =>{
+   const formData = {
+    ...data,
+    userId:user._id,
+   }
+   console.log(formData)
+   await updatePassword(formData,navigate)
+  }
+  
+
   return (
     <>
-      <form >
+      <form onSubmit={handleSubmit(formSubmit)}>
         <div className="my-10 flex flex-col gap-y-6 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-8 px-12">
           <h2 className="text-lg font-semibold text-richblack-5">Password</h2>
           <div className="flex flex-col gap-5 lg:flex-row">
@@ -31,9 +46,9 @@ export default function UpdatePassword() {
                 id="oldPassword"
                 placeholder="Enter Current Password"
                 className="form-style"
-               
+                {...register("oldPassword",{required:true})}
               />
-              <span
+              <span onClick={() => setShowOldPassword(!showOldPassword)}
                 className="absolute right-3 top-[38px] z-[10] cursor-pointer"
               >
                 {showOldPassword ? (
@@ -58,10 +73,10 @@ export default function UpdatePassword() {
                 id="newPassword"
                 placeholder="Enter New Password"
                 className="form-style"
-               
+                {...register("newPassword",{required:true})}
               />
               <span
-              
+                onClick={() => setShowNewPassword(!showNewPassword)}
                 className="absolute right-3 top-[38px] z-[10] cursor-pointer"
               >
                 {showNewPassword ? (
