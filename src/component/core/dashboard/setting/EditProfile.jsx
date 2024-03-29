@@ -7,6 +7,7 @@ import { updateProfile } from "../../../../service/operation/Profile";
 
 export default function EditProfile() {
     const {user} = useSelector((state) => state.profile);
+    const {token} = useSelector((state) => state.auth);
     const genders = ["Male", "Female", "Non-Binary", "Prefer not to say", "Other"]
     const {
         register,
@@ -23,7 +24,7 @@ export default function EditProfile() {
       userId:user._id
      }
 
-     await updateProfile(profileData,navigate,dispatch)
+     await updateProfile(token,profileData,navigate,dispatch)
     }
  
   return (

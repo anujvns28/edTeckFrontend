@@ -14,30 +14,77 @@ import MyProfile from './component/core/dashboard/MyProfile';
 import EnrolledCourses from './component/core/dashboard/EnrolledCourses';
 import Cart from './component/core/dashboard/Cart';
 import Setting from './component/core/dashboard/setting/Setting';
+import OpenRoute from './component/core/auth/OpenRoute';
+import PrivateRoute from './component/core/auth/PrivateRoute';
+import AddCourse from './component/core/dashboard/addCourse';
 
 
 function App() {
   return (
     <div className="flex min-h-screen w-screen flex-col bg-richblack-900 font-inter">
-      <Navbar/>
-     <Routes>
-      <Route path='/' element={<Home/>}/>
-      <Route path='/login' element={<Login/>} />
-      <Route path='/signup' element={<Signup/>} />
-      <Route path='/verify-email' element={<VeryfiEmail/>} />
-      <Route path='/forgot-password' element={<ForgotPassword/>} />
-      <Route path='update-password/:token' element={<UpdatePassword/>} />
-      <Route path='/about' element={<About/>} />
-      <Route path='/contact' element={<Contact/>} />
+      <Navbar />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/contact' element={<Contact />} />
 
-      <Route element={<Dashboard/>} >
-      <Route path='/dashboard/My-profile' element={<MyProfile/>} />
-      <Route path='/dashboard/enrolled-courses' element={<EnrolledCourses/>} />
-      <Route path='/dashboard/cart' element={<Cart/>} />
-      <Route path='/dashboard/settings' element={<Setting/>} />
-    
-      </Route>
-     </Routes>
+        <Route
+          path='/login'
+          element={
+            <OpenRoute>
+              <Login />
+            </OpenRoute>
+          } />
+
+        <Route
+          path='/signup'
+          element={
+            <OpenRoute>
+              <Signup />
+            </OpenRoute>
+          }
+        />
+
+        <Route
+          path='/verify-email'
+          element={
+            <OpenRoute>
+              <VeryfiEmail />
+            </OpenRoute>
+          } />
+
+        <Route
+          path='/forgot-password'
+          element={
+            <OpenRoute>
+              <ForgotPassword />
+            </OpenRoute>
+          } />
+
+        <Route
+          path='update-password/:token'
+          element={
+            <OpenRoute>
+              <UpdatePassword />
+            </OpenRoute>
+          } />
+
+        <Route 
+        element={
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        } >
+          <Route path='/dashboard/My-profile' element={<MyProfile />} />
+          <Route path='/dashboard/enrolled-courses' element={<EnrolledCourses />} />
+          <Route path='/dashboard/cart' element={<Cart />} />
+          <Route path='/dashboard/settings' element={<Setting />} />
+
+
+          <Route path='dashboard/add-course' element={<AddCourse/>} />
+
+        </Route>
+      </Routes>
     </div>
   );
 }

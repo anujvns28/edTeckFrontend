@@ -12,11 +12,11 @@ const {
 } = settingsEndpoints
 
 
-export const updateProfile = async(data,navigate,dispatch) => {
+export const updateProfile = async(token,data,navigate,dispatch) => {
     const toastId = toast.loading("Loading...")
     try {
-      const response = await apiConnector("PUT", UPDATE_PROFILE_API, 
-        data
+      const response = await apiConnector("PUT", UPDATE_PROFILE_API,data,
+      {Authorization: `Bearer ${token}`}
       )
       console.log("Update Profile API RESPONSE............", response)
 
