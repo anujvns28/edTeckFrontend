@@ -2,6 +2,9 @@ import React from 'react'
 import IconButton from '../../../../common/IconButton'
 import {HiOutlineCurrencyRupee} from "react-icons/hi"
 import {MdNavigateNext} from "react-icons/md"
+import ChipInput from './ChipInput'
+import RequirementsField from './RequirementsField'
+import Uploader from '../Uploader'
 
 const CourseInformationForm = () => {
     let errors = {}
@@ -79,24 +82,16 @@ const CourseInformationForm = () => {
       )} */}
     </div>
     {/* Course Tags */}
-    {/* <ChipInput
+    <ChipInput
       label="Tags"
       name="courseTags"
       placeholder="Enter Tags and press Enter"
-      register={register}
-      errors={errors}
-      setValue={setValue}
-      getValues={getValues}
-    /> */}
+    />
     {/* Course Thumbnail Image */}
-    {/* <Upload
+    <Uploader
       name="courseImage"
       label="Course Thumbnail"
-      register={register}
-      setValue={setValue}
-      errors={errors}
-      editData={editCourse ? course?.thumbnail : null}
-    /> */}
+    />
     {/* Benefits of the course */}
     <div className="flex flex-col space-y-2">
       <label className="text-sm text-richblack-5" htmlFor="courseBenefits">
@@ -114,14 +109,10 @@ const CourseInformationForm = () => {
       )}
     </div>
     {/* Requirements/Instructions */}
-    {/* <RequirementsField
+    <RequirementsField
       name="courseRequirements"
       label="Requirements/Instructions"
-      register={register}
-      setValue={setValue}
-      errors={errors}
-      getValues={getValues}
-    /> */}
+    />
     {/* Next Button */}
     <div className="flex justify-end gap-x-2">
       
