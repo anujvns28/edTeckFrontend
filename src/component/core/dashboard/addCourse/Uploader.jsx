@@ -1,9 +1,11 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {FiUploadCloud} from "react-icons/fi"
+import { useSelector } from 'react-redux';
 
-const Uploader = () => {
+const Uploader = ({setValue,register,name,label,errors}) => {
   const [selectedFile,setSelectedFile] = useState();
   const [preViewFile,setPreViewFile] = useState();
+  const {course,editCourse} = useSelector((state) =>state.course)
 
   const inputRef = useRef();
 
@@ -14,9 +16,23 @@ const Uploader = () => {
   const handleChange = (e) => {
     const file = e.target.files[0]
     setPreViewFile(URL.createObjectURL(file));
+    setSelectedFile(file)
+    setValue(name,file)
   }
 
+  useEffect(() => {
+   register(name,{required:true})
+   if(editCourse){
+    setPreViewFile(course.thumbnail)
+   }
+  }, [])
+
+
   return (
+  <div className="flex flex-col space-y-2">
+    <label className="text-sm text-richblack-5" htmlFor={name}>
+        {label} 
+      </label>
     <div className="bg-richblack-700 flex min-h-[250px] cursor-pointer items-center justify-center rounded-md border-2 border-dotted border-richblack-500">
         {
           preViewFile ? 
@@ -45,7 +61,7 @@ const Uploader = () => {
           ref={inputRef}
           onChange={handleChange}
           type='file'
-           className='invisible'/>
+          className='invisible'/>
 
           <div className="grid aspect-square w-14 place-items-center rounded-full bg-pure-greys-800">
             <FiUploadCloud className="text-2xl text-yellow-50" />
@@ -62,6 +78,12 @@ const Uploader = () => {
         </div>
         }
     </div>
+    {errors[name] && (
+        <span className="ml-2 text-xs tracking-wide text-pink-200">
+          {label} is required
+        </span>
+      )}
+  </div>
   )
 }
 

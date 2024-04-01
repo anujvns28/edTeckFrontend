@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 
-const RequirementsField = ({label,name}) => {
+const RequirementsField = ({label,name,register,setValue,errors}) => {
   const [requirement,setRequirement] = useState();
   const [requirementList,setRequirementList] = useState([]);
+  const {editCourse,course} = useSelector((state) => state.course);
 
   const handleClck = (e) => {
     e.preventDefault()
@@ -19,7 +21,14 @@ const RequirementsField = ({label,name}) => {
   }
 
   useEffect(() => {
-     console.log(requirementList)
+    register(name,{required:true})
+    if(editCourse){
+      setRequirementList(course.instructions)
+    }
+  },[])
+  
+  useEffect(() => {
+     setValue(name,requirementList)
   },[requirementList])
 
   return (
@@ -42,6 +51,12 @@ const RequirementsField = ({label,name}) => {
         </button>
       </div>
 
+      {errors[name] && (
+        <span className="ml-2 text-xs tracking-wide text-pink-200">
+          {label} is required
+        </span>
+      )}
+
       {requirementList.length > 0 && (
         <ul className="mt-2 list-inside list-disc">
           {requirementList.map((requirement, index) => (
@@ -58,6 +73,7 @@ const RequirementsField = ({label,name}) => {
           ))}
         </ul>
       )}
+       
     </div>
   )
 }

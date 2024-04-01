@@ -1,7 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { FaCheck } from 'react-icons/fa'
-import CourseInformationForm from './courseBuilder/CourseInformationForm'
+import CourseInformationForm from './courseInformation/CourseInformationForm'
+import CourseBuilderForm from './courseBuilder/CourseBuilderForm'
 
 const RenderStapes = () => {
     const {step} = useSelector((staet) => staet.course)
@@ -80,6 +81,7 @@ const RenderStapes = () => {
       ))}
     </div>
     {step == 1 && <CourseInformationForm/>}
+    {step == 2 && <CourseBuilderForm/>}
   </>
   )
 }

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import {MdClose} from "react-icons/md"
+import { useSelector } from 'react-redux';
 
-const ChipInput = ({label,name,placeholder}) => {
+const ChipInput = ({label,name,placeholder,register,setValue,errors}) => {
   const [tags,setTags] = useState([]);
-  
+  const {course,editCourse} = useSelector((state) => state.course);
 
   const handleKeyDown = (e) => {
    if(e.key === "Enter" || e.key === ","){
@@ -26,9 +27,15 @@ const ChipInput = ({label,name,placeholder}) => {
   }
 
   useEffect(() => {
-    
-  },[tags])
+    register(name,{required:true})
+    if(editCourse){
+      setTags(course.tag)
+    }
+  },[])
 
+  useEffect(() => {
+   setValue(name,tags)
+  },[tags])
 
   return (
     <div>
@@ -52,12 +59,17 @@ const ChipInput = ({label,name,placeholder}) => {
           </div>
         ))}
         <input
-      className='form-style'
+       className='form-style'
        placeholder={placeholder}
        name={name}
        onKeyDown={handleKeyDown}
       />
       </div>
+      {errors[name] && (
+        <span className="ml-2 text-xs tracking-wide text-pink-200">
+          {label} is required
+        </span>
+      )}
     </div>
   )
 }
