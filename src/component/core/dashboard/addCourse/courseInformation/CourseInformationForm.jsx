@@ -5,10 +5,11 @@ import { MdNavigateNext } from "react-icons/md"
 import ChipInput from './ChipInput'
 import RequirementsField from './RequirementsField'
 import Uploader from '../Uploader'
-import { addCourseDetails, fetchAllCategories } from '../../../../../service/operation/Course'
+import { addCourseDetails, editCourseDetails, fetchAllCategories } from '../../../../../service/operation/Course'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCourse, setStep } from '../../../../../slices/courseSlice'
+import toast from 'react-hot-toast'
 
 const CourseInformationForm = () => {
   const {
@@ -16,6 +17,7 @@ const CourseInformationForm = () => {
   handleSubmit,
   formState:{errors},
   setValue,
+  getValues
   } = useForm();
 
   const [categories, setCategories] = useState();
@@ -32,8 +34,81 @@ const CourseInformationForm = () => {
     }
   }
 
+  // check form is updated or not
+  const isFormUpdated = () => {
+   const currentValues = getValues();
+   console.log( currentValues.courseCategory,course.category)
+   if(
+    currentValues.courseTitle !== course.courseName ||
+      currentValues.courseShortDesc !== course.courseDescription ||
+      currentValues.coursePrice !== course.price ||
+      currentValues.courseTags.toString() !== course.tag.toString() ||
+      currentValues.courseBenefits !== course.whatYouWillLearn ||
+      currentValues.courseCategory !== course.category ||
+      currentValues.courseRequirements.toString() !==
+        course.instructions.toString() ||
+      currentValues.courseImage !== course.thumbnail
+   ){
+    return true
+   } else {
+    return false
+   }
+   
+  }
+
   // handle form
   const handleForm = async(data) => {
+    console.log("calling")
+    if(editCourse){
+
+      if(isFormUpdated()){
+        const currentValues = getValues()
+        const formData = new FormData()
+  
+        formData.append("courseId", course._id)
+        if (currentValues.courseTitle !== course.courseName) {
+          formData.append("courseName", data.courseTitle)
+        }
+        if (currentValues.courseShortDesc !== course.courseDescription) {
+          formData.append("courseDescription", data.courseShortDesc)
+        }
+        if (currentValues.coursePrice !== course.price) {
+          formData.append("price", data.coursePrice)
+        }
+        if (currentValues.courseTags.toString() !== course.tag.toString()) {
+          formData.append("tag", JSON.stringify(data.courseTags))
+        }
+        if (currentValues.courseBenefits !== course.whatYouWillLearn) {
+          formData.append("whatYouWillLearn", data.courseBenefits)
+        }
+        if (currentValues.courseCategory._id !== course.category._id) {
+          formData.append("category", data.courseCategory)
+        }
+        if (
+          currentValues.courseRequirements.toString() !==
+          course.instructions.toString()
+        ) {
+          formData.append(
+            "instructions",
+            JSON.stringify(data.courseRequirements)
+          )
+        }
+        if (currentValues.courseImage !== course.thumbnail) {
+          formData.append("thumbnailImage", data.courseImage)
+        }
+
+      const result = await editCourseDetails(formData,token)
+      if(result){
+        dispatch(setStep(2))
+        dispatch(setCourse(result))
+      }
+
+      }else {
+        toast.error("No changes made to the form")
+      }
+      return
+    }
+
     const formData = new FormData();
     formData.append("courseName", data.courseTitle)
     formData.append("courseDescription", data.courseShortDesc)
@@ -66,6 +141,8 @@ const CourseInformationForm = () => {
     }
     handleCategories();
   }, [])
+
+  
 
   return (
     <form
@@ -199,6 +276,7 @@ const CourseInformationForm = () => {
          {
            editCourse && 
            <button
+           onClick={()=> dispatch(setStep(2))}
            className={`flex cursor-pointer items-center gap-x-2 rounded-md bg-richblack-300 py-[8px] px-[20px] font-semibold text-richblack-900`}
          >
            Continue Wihout Saving

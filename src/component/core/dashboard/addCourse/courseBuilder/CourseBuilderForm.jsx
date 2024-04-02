@@ -1,29 +1,75 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import IconButton from '../../../../common/IconButton'
 import {IoAddCircleOutline} from "react-icons/io5"
 import NestedView from './NestedView'
 import {MdNavigateNext} from "react-icons/md"
-import { useDispatch } from 'react-redux'
-import { setEditCourse, setStep } from '../../../../../slices/courseSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { setCourse, setEditCourse, setStep } from '../../../../../slices/courseSlice'
+import { createSection, updateSection } from '../../../../../service/operation/Course'
 
 const CourseBuilderForm = () => {
+
+  const {course} = useSelector((state) => state.course);
+  const {token} = useSelector((state) => state.auth)
+  const [editSection,setEditSection] = useState(false);
+  const [editSectionId,setEditSectionId] = useState();
 
     const {
     register,
     handleSubmit,
-    formState:{errors}
+    formState:{errors},
+    setValue,
     } = useForm()
     const dispatch = useDispatch();
 
-    const onSubmit = async() => {
+    const onSubmit = async(data) => {
+    if(editSection){
+      const result = await updateSection({
+        sectionName:data.sectionName,
+        sectionId:editSectionId,
+        courseId:course._id
+      },
+      token
+      )
 
+      if(result){
+        dispatch(setCourse(result))
+        setEditSection(false)
+        setValue("sectionName","")
+        setEditSectionId(null)
+      }
+      return
+    }
+
+    const result = await createSection(
+      {
+        sectionName:data.sectionName,
+        courseId:course._id
+      },
+      token
+      );
+  
+      if(result){
+        dispatch(setCourse(result))
+        setValue("sectionName","")
+      }
     }
 
     const goBack = () => {
      dispatch(setStep(1));
      dispatch(setEditCourse(true))
     }
+
+    const editSectionInformation = (sectionName,sectionId) =>{
+        setEditSection(true)
+        setValue("sectionName",sectionName)
+        setEditSectionId(sectionId)
+    }
+
+    useEffect(() => {
+      console.log(course,"printgin course")
+    },[course])
     
   return (
     <div className="space-y-8 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6">
@@ -49,16 +95,29 @@ const CourseBuilderForm = () => {
           <IconButton
             type="submit"
             active={true}
-            text={"Create Section"}
+            text={editSection ? "Edit Section Name" : "Create Section"}
           >
             <IoAddCircleOutline size={20}  />
           </IconButton>
+
+          {editSection && (
+            <button
+              type="button"
+              onClick={() => {
+                setEditSection(false)
+                setValue("sectionName","")
+              }}
+              className="text-sm text-richblack-300 underline"
+            >
+              Cancel Edit
+            </button>
+          )}
           
         </div>
       </form>
-      {/* {course.courseContent.length > 0 && (
-        <NestedView  />
-      )} */}
+      {course.courseContent.length > 0 && (
+        <NestedView editSectionInformation={editSectionInformation} />
+      )}
       {/* Next Prev Button */}
       <div className="flex justify-end gap-x-3">
         <button
