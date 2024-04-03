@@ -27,6 +27,8 @@ const Uploader = ({setValue,register,name,label,errors}) => {
    }
   }, [])
 
+  
+
 
   return (
   <div className="flex flex-col space-y-2">

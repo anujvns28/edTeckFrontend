@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
- step:1,
+ step:localStorage.getItem("course") ? 2 : 1,
  editCourse:false,
- course:null
+ course:localStorage.getItem("course")? JSON.parse(localStorage.getItem("course")) : null
 }
 
 export const courseSlice = createSlice({

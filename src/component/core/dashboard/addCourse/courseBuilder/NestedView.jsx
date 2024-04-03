@@ -9,12 +9,14 @@ import ConfirmationModal from '../../../../common/ConfirmationModal'
 import { deleteSection } from '../../../../../service/operation/Course'
 import { setCourse } from '../../../../../slices/courseSlice'
 import { setToken } from '../../../../../slices/authSlice'
+import SubSectionModal from './SubSectionModal'
 
 
 const NestedView = ({editSectionInformation}) => {
   const {course} = useSelector((state) => state.course);
 
   const [modalData,setModalData] = useState();
+  const [subSectionModal,setSubSectionModal] = useState();
   const {token} = useSelector((state) => state.auth)
   const dispatch = useDispatch();
 
@@ -77,7 +79,14 @@ const NestedView = ({editSectionInformation}) => {
                   key={data?._id}
                   className="flex cursor-pointer items-center justify-between gap-x-3 border-b-2 border-b-richblack-600 py-2"
                 >
-                  <div className="flex items-center gap-x-3 py-2 ">
+                  <div onClick={() => setSubSectionModal({
+                    lectureStatusText : "Viewing",
+                    add:false,
+                    edit:false,
+                    view:true,
+                    sectionId:data
+                  })}
+                  className="flex items-center gap-x-3 py-2 ">
                     <RxDropdownMenu className="text-2xl text-richblack-50" />
                     <p className="font-semibold text-richblack-50">
                       {data.title}
@@ -99,6 +108,13 @@ const NestedView = ({editSectionInformation}) => {
               ))}
               {/* Add New Lecture to Section */}
               <button
+               onClick={() => setSubSectionModal({
+                lectureStatusText:"Adding",
+                add:true,
+                edit:false,
+                view:false,
+                sectionId:section._id
+               })}
                 className="mt-3 flex items-center gap-x-1 text-yellow-50"
               >
                 <FaPlus className="text-lg" />
@@ -115,6 +131,14 @@ const NestedView = ({editSectionInformation}) => {
         modalData={modalData}
        />
       }
+      {/* subSection modal */}
+       {
+        subSectionModal && 
+        <SubSectionModal 
+         subSectionModalData={subSectionModal}
+         setSubSectionModal={setSubSectionModal}
+        />
+       }
     </>
   )
 }

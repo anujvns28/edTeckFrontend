@@ -4,7 +4,7 @@ import { HiOutlineCurrencyRupee } from "react-icons/hi"
 import { MdNavigateNext } from "react-icons/md"
 import ChipInput from './ChipInput'
 import RequirementsField from './RequirementsField'
-import Uploader from '../Uploader'
+import Uploader from './ThumbnailUploader'
 import { addCourseDetails, editCourseDetails, fetchAllCategories } from '../../../../../service/operation/Course'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -37,7 +37,6 @@ const CourseInformationForm = () => {
   // check form is updated or not
   const isFormUpdated = () => {
    const currentValues = getValues();
-   console.log( currentValues.courseCategory,course.category)
    if(
     currentValues.courseTitle !== course.courseName ||
       currentValues.courseShortDesc !== course.courseDescription ||
@@ -101,6 +100,7 @@ const CourseInformationForm = () => {
       if(result){
         dispatch(setStep(2))
         dispatch(setCourse(result))
+
       }
 
       }else {
