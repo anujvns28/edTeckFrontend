@@ -1,25 +1,79 @@
 import React, { useEffect } from 'react'
 import {RxCross2} from "react-icons/rx"
-import { useForm } from 'react-hook-form'
+import { get, useForm } from 'react-hook-form'
 import SubSectionLecutureUploader from './SubSectionLecutureUploader'
 import IconButton from '../../../../common/IconButton'
-import { createSubSection, editCourseDetails } from '../../../../../service/operation/Course'
+import { createSubSection, editCourseDetails, updateSubSection } from '../../../../../service/operation/Course'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCourse } from '../../../../../slices/courseSlice'
+import toast from 'react-hot-toast'
+
 
 const SubSectionModal = ({subSectionModalData,setSubSectionModal}) => {
+
+ 
    
     const {
         register,
         handleSubmit,
         formState:{errors},
-        setValue
+        setValue,
+        getValues
     } = useForm()
     const dispatch = useDispatch()
     const {course} = useSelector((state) => state.course)
     const {token} = useSelector((state) => state.auth)
 
+
+    const isFormUpdate = () => {
+      const subSectionData = getValues()  
+      if(
+        subSectionData.lectureTitle !== subSectionModalData.subsectionData.title ||
+        subSectionData.lectureDesc !== subSectionModalData.subsectionData.description ||
+        subSectionData.lectureVidio !== subSectionModalData.subsectionData.videoUrl
+        ){
+          return true
+        }
+        return false
+    }
+
     const handleForm = async(data) => {
+        if(subSectionModalData.edit){
+          if(isFormUpdate()){
+            const formData = new FormData()
+            const currentValue = getValues();
+
+            if(currentValue.lectureTitle !== subSectionModalData.subsectionData.title){
+               formData.append("title",data.lectureTitle)
+            }
+            if(currentValue.lectureDesc !== subSectionModalData.subsectionData.description){
+              formData.append("description",data.lectureDesc)
+           }
+           if(currentValue.lectureVideo !== subSectionModalData.subsectionData.videoUrl){
+            formData.append("video",data.lectureVidio)
+            console.log(data.videoUrl,"thi is selected url")
+            }
+           formData.append("sectionId",subSectionModalData.sectionId);
+           formData.append("subSectionId",subSectionModalData.subsectionData._id);
+           
+           const result = await updateSubSection(formData,token);
+
+           if(result){
+            const updateSection = course.courseContent.map((section) =>
+            section._id === result._id ?  result : section
+            )
+            const updateCourse = {...course,courseContent:updateSection}
+            dispatch(setCourse(updateCourse))
+            setSubSectionModal(null)
+           }
+
+
+          }else{
+            toast.error("No changes made")
+          }
+          return
+        }
+
         const formData = new FormData();
 
         formData.append("sectionId",subSectionModalData.sectionId)
@@ -40,10 +94,12 @@ const SubSectionModal = ({subSectionModalData,setSubSectionModal}) => {
         }
     }
 
+
+
     useEffect(() => {
-     if( subSectionModalData.view){
-        setValue("lectureTitle",subSectionModalData.sectionId.title)
-        setValue("lectureDesc",subSectionModalData.sectionId.description)
+     if( subSectionModalData.view || subSectionModalData.edit){
+        setValue("lectureTitle",subSectionModalData.subsectionData.title)
+        setValue("lectureDesc",subSectionModalData.subsectionData.description)
      }
     },[])
 
@@ -69,6 +125,9 @@ const SubSectionModal = ({subSectionModalData,setSubSectionModal}) => {
                name={"lectureVidio"}
                register={register}
                errors={errors}
+               view={subSectionModalData.view ? true : false}
+               edit={subSectionModalData.edit? true :false}
+               videoUrl= {!subSectionModalData.add ? subSectionModalData.subsectionData.videoUrl : null}
                setValue={setValue}
                />
 
@@ -81,6 +140,7 @@ const SubSectionModal = ({subSectionModalData,setSubSectionModal}) => {
               id="lectureTitle"
               placeholder="Enter Lecture Title"
               {...register("lectureTitle", { required: true })}
+              readOnly={subSectionModalData.view ? true : false}
               className="form-style w-full"
             />
             {errors.lectureTitle && (
@@ -99,6 +159,7 @@ const SubSectionModal = ({subSectionModalData,setSubSectionModal}) => {
               id="lectureDesc"
               placeholder="Enter Lecture Description"
               {...register("lectureDesc", { required: true })}
+              readOnly={subSectionModalData.view ? true : false}
               className="form-style resize-x-none min-h-[130px] w-full"
             />
             {errors.lectureDesc && (
@@ -114,7 +175,7 @@ const SubSectionModal = ({subSectionModalData,setSubSectionModal}) => {
               <IconButton
                 active={true}
                 type={"submit"}
-                text={"Save"}
+                text={subSectionModalData.edit ? "Save Changes" : "Save"}
               />
             </div>
           }

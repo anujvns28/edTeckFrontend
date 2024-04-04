@@ -6,7 +6,7 @@ import { RxDropdownMenu } from "react-icons/rx"
 import {FaPlus} from "react-icons/fa"
 import {AiFillCaretDown} from "react-icons/ai"
 import ConfirmationModal from '../../../../common/ConfirmationModal'
-import { deleteSection } from '../../../../../service/operation/Course'
+import { deleteSection, deleteSubSection } from '../../../../../service/operation/Course'
 import { setCourse } from '../../../../../slices/courseSlice'
 import { setToken } from '../../../../../slices/authSlice'
 import SubSectionModal from './SubSectionModal'
@@ -33,9 +33,27 @@ const NestedView = ({editSectionInformation}) => {
    }
   }
 
+  const handleDeleteSubSection = async(sectionId,sebSectionId)=>{
+    const result = await deleteSubSection({
+      sectionId:sectionId,
+      subSectionId:sebSectionId
+    },
+    token)
+
+    setModalData(null)
+
+    if(result){
+      const updateSection = course.courseContent.map((section) =>
+            section._id === result._id ?  result : section
+            )
+            const updateCourse = {...course,courseContent:updateSection}
+            dispatch(setCourse(updateCourse))
+    }
+  }
+
 
   return (
-    <>
+    <> 
       <div
         className="rounded-lg bg-richblack-700 p-6 px-8"
         id="nestedViewContainer"
@@ -79,12 +97,12 @@ const NestedView = ({editSectionInformation}) => {
                   key={data?._id}
                   className="flex cursor-pointer items-center justify-between gap-x-3 border-b-2 border-b-richblack-600 py-2"
                 >
-                  <div onClick={() => setSubSectionModal({
+                  <div 
+                  onClick={() => setSubSectionModal({
                     lectureStatusText : "Viewing",
-                    add:false,
-                    edit:false,
                     view:true,
-                    sectionId:data
+                    sectionId:section._id,
+                    subsectionData:data
                   })}
                   className="flex items-center gap-x-3 py-2 ">
                     <RxDropdownMenu className="text-2xl text-richblack-50" />
@@ -96,10 +114,25 @@ const NestedView = ({editSectionInformation}) => {
                     className="flex items-center gap-x-3"
                   >
                     <button
+                    onClick={() => setSubSectionModal({
+                      lectureStatusText : "Editing",
+                      edit:true,
+                      // subsection data in sectionId
+                      sectionId:section._id,
+                      subsectionData:data
+                    })}
                     >
                       <MdEdit className="text-xl text-richblack-300" />
                     </button>
                     <button
+                     onClick={() => setModalData({
+                      text1:"Delete this Sub-Section?",
+                      text2:"This lecture will be deleted",
+                      btn1:"Delete",
+                      btn2:"Cancel",
+                      handlear1:() => handleDeleteSubSection(section._id,data._id),
+                      handlear2:() => setModalData(null)
+                     })}
                     >
                       <RiDeleteBin6Line className="text-xl text-richblack-300" />
                     </button>
@@ -111,8 +144,6 @@ const NestedView = ({editSectionInformation}) => {
                onClick={() => setSubSectionModal({
                 lectureStatusText:"Adding",
                 add:true,
-                edit:false,
-                view:false,
                 sectionId:section._id
                })}
                 className="mt-3 flex items-center gap-x-1 text-yellow-50"

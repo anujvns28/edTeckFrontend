@@ -17,6 +17,7 @@ import Setting from './component/core/dashboard/setting/Setting';
 import OpenRoute from './component/core/auth/OpenRoute';
 import PrivateRoute from './component/core/auth/PrivateRoute';
 import AddCourse from './component/core/dashboard/addCourse';
+import MyCourses from './component/core/dashboard/InstructorCourses/MyCourses';
 
 
 function App() {
@@ -82,7 +83,7 @@ function App() {
 
 
           <Route path='dashboard/add-course' element={<AddCourse/>} />
-
+          <Route path='dashboard/my-courses' element={<MyCourses/>} />
         </Route>
       </Routes>
     </div>

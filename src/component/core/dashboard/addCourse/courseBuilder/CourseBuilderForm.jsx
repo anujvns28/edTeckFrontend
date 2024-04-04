@@ -7,6 +7,7 @@ import {MdNavigateNext} from "react-icons/md"
 import { useDispatch, useSelector } from 'react-redux'
 import { setCourse, setEditCourse, setStep } from '../../../../../slices/courseSlice'
 import { createSection, updateSection } from '../../../../../service/operation/Course'
+import toast from 'react-hot-toast'
 
 const CourseBuilderForm = () => {
 
@@ -67,9 +68,20 @@ const CourseBuilderForm = () => {
         setEditSectionId(sectionId)
     }
 
-    useEffect(() => {
-      console.log(course,"printgin course")
-    },[course])
+
+    const goToNext = () => {
+      if(course.courseContent.length === 0){
+        toast.error("Add atlest one Section")
+        return
+      }
+
+      if(course.courseContent.some((section) => section.subSection.length === 0)){
+        toast.error("add atleast one lecture in each section")
+        return
+      }
+
+      dispatch(setStep(3))
+    }
     
   return (
     <div className="space-y-8 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6">
@@ -126,7 +138,8 @@ const CourseBuilderForm = () => {
         >
           Back
         </button>
-        <IconButton text="Next" active={true} >
+
+        <IconButton text="Next" active={true} handlear={goToNext}>
           <MdNavigateNext />
         </IconButton>
       </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FiUploadCloud } from "react-icons/fi"
 
-const SubSectionLecutureUploader = ({ name, label, register, errors, setValue }) => {
+const SubSectionLecutureUploader = ({ name, label, register, errors, setValue,view,edit,videoUrl }) => {
 
     const [selectedFile, setSelectedFile] = useState();
     const [preViewFile, setPreViewFile] = useState();
@@ -21,6 +21,10 @@ const SubSectionLecutureUploader = ({ name, label, register, errors, setValue })
 
     useEffect(() => {
         {register(name,{required:true})}
+        if(videoUrl){
+            setPreViewFile(videoUrl)
+            setValue(name,videoUrl)
+        }
     },[])
 
     return (
@@ -69,7 +73,9 @@ const SubSectionLecutureUploader = ({ name, label, register, errors, setValue })
                             className="h-full w-full rounded-md object-cover"
                         />
 
-                        <button
+                        {
+                            !view &&
+                            <button
                             onClick={() => {
                                 setPreViewFile(null);
                                 setSelectedFile(null)
@@ -77,7 +83,8 @@ const SubSectionLecutureUploader = ({ name, label, register, errors, setValue })
                             className="mt-3 text-richblack-400 underline"
                         >
                             Cancel
-                        </button>
+                        </button> 
+                        }
                     </div>
             }
             </div>
