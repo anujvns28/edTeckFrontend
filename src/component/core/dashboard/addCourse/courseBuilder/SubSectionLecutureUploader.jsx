@@ -13,7 +13,6 @@ const SubSectionLecutureUploader = ({ name, label, register, errors, setValue,vi
 
     const handeleChange = (e) => {
         const file = e.target.files[0]
-        console.log(file, "this is vidio")
         setPreViewFile(URL.createObjectURL(file))
         setValue(name,file);
     }
