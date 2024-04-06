@@ -24,6 +24,7 @@ const CoursesTable = ({courses,fetchCourses}) => {
   const handleCourseDelete = async(courseId) => {
     await deleteCourse({ courseId: courseId }, token)
     fetchCourses()
+    setModalData(null)
   }
 
   

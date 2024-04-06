@@ -13,7 +13,8 @@ const {
   UPDATE_SUBSECTION_API,
   DELETE_SUBSECTION_API,
   GET_ALL_INSTRUCTOR_COURSES_API,
-  DELETE_COURSE_API
+  DELETE_COURSE_API,
+  GET_FULL_COURSE_DETAILS_AUTHENTICATED
 } = courseEndpoints
 
 // fetching all categories api
@@ -261,4 +262,34 @@ export const deleteCourse = async (data, token) => {
     toast.error(error.message)
   }
   toast.dismiss(toastId)
+}
+
+
+// get full details of a course
+export const getFullDetailsOfCourse = async (courseId, token) => {
+  const toastId = toast.loading("Loading...")
+  let result = null
+  try {
+    const response = await apiConnector(
+      "POST",
+      GET_FULL_COURSE_DETAILS_AUTHENTICATED,
+      {
+        courseId,
+      },
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    )
+    console.log("COURSE_FULL_DETAILS_API API RESPONSE............", response)
+
+    if (!response.data.success) {
+      throw new Error(response.data.message)
+    }
+    result = response?.data?.data
+  } catch (error) {
+    console.log("COURSE_FULL_DETAILS_API API ERROR............", error)
+    result = error.response.data
+  }
+  toast.dismiss(toastId)
+  return result
 }

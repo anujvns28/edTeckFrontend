@@ -18,6 +18,7 @@ import OpenRoute from './component/core/auth/OpenRoute';
 import PrivateRoute from './component/core/auth/PrivateRoute';
 import AddCourse from './component/core/dashboard/addCourse';
 import MyCourses from './component/core/dashboard/InstructorCourses/MyCourses';
+import EditCourse from './component/core/dashboard/EditCourse/EditCourse';
 
 
 function App() {
@@ -84,6 +85,7 @@ function App() {
 
           <Route path='dashboard/add-course' element={<AddCourse/>} />
           <Route path='dashboard/my-courses' element={<MyCourses/>} />
+          <Route path='dashboard/edit-course/:courseId' element={<EditCourse/>} />
         </Route>
       </Routes>
     </div>
