@@ -19,6 +19,8 @@ import PrivateRoute from './component/core/auth/PrivateRoute';
 import AddCourse from './component/core/dashboard/addCourse';
 import MyCourses from './component/core/dashboard/InstructorCourses/MyCourses';
 import EditCourse from './component/core/dashboard/EditCourse/EditCourse';
+import Catlog from './pages/Catlog';
+import CouseDetails from './pages/CouseDetails';
 
 
 function App() {
@@ -87,6 +89,9 @@ function App() {
           <Route path='dashboard/my-courses' element={<MyCourses/>} />
           <Route path='dashboard/edit-course/:courseId' element={<EditCourse/>} />
         </Route>
+
+        <Route path='/catalog/:catlogName' element={<Catlog/>} />
+        <Route path='/courses/:couseId' element={<CouseDetails/>} />
       </Routes>
     </div>
   );

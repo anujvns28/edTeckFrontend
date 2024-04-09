@@ -14,7 +14,8 @@ const {
   DELETE_SUBSECTION_API,
   GET_ALL_INSTRUCTOR_COURSES_API,
   DELETE_COURSE_API,
-  GET_FULL_COURSE_DETAILS_AUTHENTICATED
+  GET_FULL_COURSE_DETAILS_AUTHENTICATED,
+  COURSE_DETAILS_API
 } = courseEndpoints
 
 // fetching all categories api
@@ -291,5 +292,29 @@ export const getFullDetailsOfCourse = async (courseId, token) => {
     result = error.response.data
   }
   toast.dismiss(toastId)
+  return result
+}
+
+export const fetchCourseDetails = async (courseId) => {
+  const toastId = toast.loading("Loading...")
+  //   dispatch(setLoading(true));
+  let result = null
+  try {
+    const response = await apiConnector("POST", COURSE_DETAILS_API, {
+      courseId,
+    })
+    console.log("COURSE_DETAILS_API API RESPONSE............", response)
+
+    if (!response.data.success) {
+      throw new Error(response.data.message)
+    }
+    result = response.data
+  } catch (error) {
+    console.log("COURSE_DETAILS_API API ERROR............", error)
+    result = error.response.data
+    // toast.error(error.response.data.message);
+  }
+  toast.dismiss(toastId)
+  //   dispatch(setLoading(false));
   return result
 }

@@ -1,43 +1,35 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from "../../assets/Logo/Logo-Full-Light.png"
 import { Link, matchPath, useLocation } from 'react-router-dom'
 import { NavbarLinks } from "../../data/navbar-links"
 import { useSelector } from 'react-redux'
 import { BsChevronDown } from "react-icons/bs"
 import ProfileDropdown from '../core/auth/ProfileDropdown'
+import { fetchAllCategories } from '../../service/operation/Course'
 
 const Navbar = () => {
 
-  const subLinks = [
-    {
-      title: "Python",
-      link: "/catalog/python",
-    },
-    {
-      title: "javascript",
-      link: "/catalog/javascript",
-    },
-    {
-      title: "web-development",
-      link: "/catalog/web development",
-    },
-    {
-      title: "Android Development",
-      link: "/catalog/Android Development",
-    },
-  ];
-
-  
-
   const location = useLocation();
   const { token } = useSelector((state) => state.auth);
+  const [subLinks,setSublinks] = useState();
 
   const checkLocation = (route) => {
     const result = matchPath({ path: route }, location.pathname);
     return result
   }
 
-  console.log(token)
+  // fetching categories
+  const handleCategories = async () => {
+    const result = await fetchAllCategories();
+
+    if (result) {
+     setSublinks(result.data)
+    }
+  }
+
+  useEffect(() => {
+    handleCategories();
+  },[])
 
   return (
     <div className='flex h-14 items-center justify-center border-b-[1px] border-b-richblack-700 '>
@@ -49,48 +41,68 @@ const Navbar = () => {
         </Link>
 
         {/* links */}
-        <div className='flex gap-x-6 text-richblack-25 relative'>
-          {
-            NavbarLinks.map((item) => (
-              item.title !== "Catalog" ?
-                <Link to={item?.path}>
-                  <p className={`${checkLocation(item.path) ? "text-yellow-25" : ""}`}>{item.title}</p>
-                </Link>
-                : <div>
-
-                  <div className={`group relative flex cursor-pointer items-center gap-1 ${checkLocation("/catalog/:catalogName")
-                      ? "text-yellow-25"
-                      : "text-richblack-25"
-                    }`}>
-                    <p>{item.title}</p>
-                    <BsChevronDown />
-
-                    {/* <div className="absolute left-[50%] top-[50%] z-[1000] flex w-[200px] translate-x-[-45%] translate-y-[1.5em] flex-col opacity-0 rounded-lg bg-richblack-5 p-4 text-richblack-900  transition-all duration-150 group-hover:visible group-hover:translate-y-[1.65em] group-hover:opacity-100 lg:w-[300px]">
-                      <div className="absolute left-[50%] top-0 z-10 h-6 w-6 translate-[80-x%] translate-y-[-40%] rotate-45 select-none rounded bg-richblack-5"></div>
-                      {
-                      !subLinks ? 
-                      <div className='flex items-center justify-center text-black'>Loading...</div> 
-                      : <div>
+        <nav className="hidden md:block">
+          <ul className="flex gap-x-6 text-richblack-25">
+            {NavbarLinks.map((link, index) => (
+              <li key={index}>
+                {link.title === "Catalog" ? (
+                  <>
+                    <div
+                      className={`group relative flex cursor-pointer items-center gap-1 ${
+                        checkLocation("/catalog/:catalogName")
+                          ? "text-yellow-25"
+                          : "text-richblack-25"
+                      }`}
+                    >
+                      <p>{link.title}</p>
+                      <BsChevronDown />
+                      <div className="invisible absolute left-[50%] top-[50%] z-[1000] flex w-[200px] translate-x-[-50%] translate-y-[3em] flex-col rounded-lg bg-richblack-5 p-4 text-richblack-900 opacity-0 transition-all duration-150 group-hover:visible group-hover:translate-y-[1.65em] group-hover:opacity-100 lg:w-[300px]">
+                        <div className="absolute left-[50%] top-0 -z-10 h-6 w-6 translate-[80-x%] translate-y-[-40%] rotate-45 select-none rounded bg-richblack-5"></div>
                         {
-                          subLinks.map((categories) => {
-                            return <div className="">
-                              <Link to={categories.link.split(" ").join("-").toLowerCase()}>
-                                <div className='rounded-lg bg-transparent py-4 pl-4 hover:bg-richblack-50'>
-                                {categories.title}
-                                </div>
-                              </Link>
-                            </div>
-                          })
-                        }
+                        !subLinks ? (
+                          <p className="text-center">Loading...</p>
+                        ) : subLinks.length ? (
+                          <>
+                            {subLinks
+                              ?.filter(
+                                (subLink) => subLink?.courses?.length > 0
+                              )
+                              ?.map((subLink, i) => (
+                                <Link
+                                  to={`/catalog/${subLink.name
+                                    .split(" ")
+                                    .join("-")
+                                    .toLowerCase()}`}
+                                  className="rounded-lg bg-transparent py-4 pl-4 hover:bg-richblack-50"
+                                  key={i}
+                                >
+                                  <p>{subLink.name}</p>
+                                </Link>
+                              ))}
+                          </>
+                        ) : (
+                          <p className="text-center">No Courses Found</p>
+                        )}
                       </div>
-                      }
-                    </div> */}
-                  </div>
-                </div>
-            ))
-
-          }
-        </div>
+                    </div>
+                  </>
+                ) : (
+                  <Link to={link?.path}>
+                    <p
+                      className={`${
+                        checkLocation(link?.path)
+                          ? "text-yellow-25"
+                          : "text-richblack-25"
+                      }`}
+                    >
+                      {link.title}
+                    </p>
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
 
         {/* login signup */}
         <div className='items-center gap-x-4 flex'>
