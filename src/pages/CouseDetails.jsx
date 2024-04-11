@@ -7,11 +7,17 @@ import { useParams } from "react-router-dom"
 import CourseDetailsCard from '../component/core/course/CourseDetailsCard';
 import ReactMarkdown from "react-markdown"
 import CourseAccordionBar from '../component/core/course/CourseAccordionBar';
+import {useSelector} from "react-redux"
+import ConfirmationModal from "../component/common/ConfirmationModal"
 
 const CouseDetails = () => {
+  const {token} = useSelector((state) => state.auth);
+  const {user} = useSelector((state) => state.profile)
   const [couseData, setCouseData] = useState();
-  const [isActive,setIsActive] = useState();
+  const [isActive,setIsActive] = useState([]);
   const { couseId } = useParams()
+
+  const [modalData,setModalData] = useState();
 
   const fetchCouseData = async () => {
     const result = await fetchCourseDetails(couseId);
@@ -19,6 +25,21 @@ const CouseDetails = () => {
       setCouseData(result.data?.courseDetails);
     }
   }
+
+  const handleActive = (section_id) => {
+    let arr = [...isActive]
+   const index =  arr.findIndex((item) => item == section_id);
+   
+   if(index >= 0){
+    arr.splice(index,1)
+    setIsActive(arr);
+   }else{
+    arr.push(section_id);
+    setIsActive(arr);
+   }
+   }
+  
+  console.log(isActive,"pritng is active")
 
   const formatDate = (dateString) => {
     const dateObject = new Date(dateString);
@@ -85,6 +106,7 @@ const CouseDetails = () => {
               <div className="right-[1rem] top-[60px] mx-auto hidden min-h-[600px] w-1/3 max-w-[410px] translate-y-24 md:translate-y-0 lg:absolute  lg:block">
                 <CourseDetailsCard
                   course={couseData}
+                  setModalData={setModalData}
                 />
               </div>
             </div>
@@ -121,7 +143,7 @@ const CouseDetails = () => {
                   <div>
                     <button
                       className="text-yellow-25"
-
+                      onClick={() => setIsActive([])}
                     >
                       Collapse all sections
                     </button>
@@ -136,7 +158,7 @@ const CouseDetails = () => {
                     course={course}
                     key={index}
                     isActive={isActive}
-                    setIsActive={setIsActive}
+                    handleActive={handleActive}
                   />
                 ))}
               </div>
@@ -166,7 +188,7 @@ const CouseDetails = () => {
         </div>
       }
 
-
+      {modalData && <ConfirmationModal modalData={modalData}/> }
       <Footer />
 
     </>

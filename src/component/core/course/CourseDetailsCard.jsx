@@ -2,8 +2,39 @@ import React from 'react'
 import IconButton from '../../common/IconButton'
 import {BsFillCaretRightFill} from "react-icons/bs"
 import {FaShareSquare} from "react-icons/fa"
+import {useSelector} from "react-redux"
+import {useNavigate} from "react-router-dom"
+import {toast} from "react-hot-toast"
 
-const CourseDetailsCard = ({course}) => {
+const CourseDetailsCard = ({course,setModalData}) => {
+  const {token} = useSelector((state) => state.auth)
+  const navigate = useNavigate()
+
+  const handleBuyNow = () => {
+    if(!token){
+      setModalData({
+        text1:"You are not logged in!?",
+        text2:"Please login to Purchase Course.",
+        btn1 :'Login',
+        btn2:"Cancel",
+        handlear1:() => navigate("/login"),
+        handlear2:() => setModalData(null)
+       })
+    }
+  }
+
+  const handleCart = () => {
+    if(!token){
+      setModalData({
+        text1:"You are not logged in!?",
+        text2:"Please login to add To Cart",
+        btn1 :'Login',
+        btn2:"Cancel",
+        handlear1:() => navigate("/login"),
+        handlear2:() => setModalData(null)
+       })
+    }
+  }
   return (
     <>
       <div
@@ -22,12 +53,16 @@ const CourseDetailsCard = ({course}) => {
           </div>
           <div className="flex flex-col gap-4">
           <button
+            onClick={handleBuyNow}
               className="cursor-pointer rounded-md bg-yellow-50 px-[20px] py-[8px] font-semibold text-richblack-900"
             >
             Buy Now
             </button>
 
-            <button className="cursor-pointer rounded-md bg-richblack-800 px-[20px] py-[8px] font-semibold text-richblack-5">
+            <button
+            onClick={handleCart}
+            className="cursor-pointer rounded-md bg-richblack-800 px-[20px] py-[8px] font-semibold text-richblack-5">
+
                 Add to Cart
             </button>
            
@@ -57,7 +92,10 @@ const CourseDetailsCard = ({course}) => {
           <div className="text-center">
             <button
               className="mx-auto flex items-center gap-2 py-6 text-yellow-100 "
-             
+              onClick={() => {
+                navigator.clipboard.writeText(window.location.href)
+                toast.success("Link copied to clipboard")
+              }}
             >
               <FaShareSquare size={15} /> Share
             </button>
