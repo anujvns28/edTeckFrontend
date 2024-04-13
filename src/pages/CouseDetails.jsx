@@ -18,12 +18,15 @@ const CouseDetails = () => {
   const { couseId } = useParams()
 
   const [modalData,setModalData] = useState();
+  const [loading,setLoading] = useState(false);
 
   const fetchCouseData = async () => {
+    setLoading(true)
     const result = await fetchCourseDetails(couseId);
     if (result) {
       setCouseData(result.data?.courseDetails);
     }
+    setLoading(false)
   }
 
   const handleActive = (section_id) => {
@@ -57,7 +60,7 @@ const CouseDetails = () => {
       <div className={`relative w-full bg-richblack-800 `}>
         {/* Hero Section */}
         {
-          !couseData ? "loading.."
+          !couseData ? <div className='flex items-center text-white text-xl justify-center w-screen h-screen'>Loading...</div>
             : <div className="mx-auto box-content px-4 lg:w-[1260px] 2xl:relative ">
               <div className="mx-auto grid min-h-[450px] max-w-maxContentTab justify-items-center py-8 lg:mx-0 lg:justify-items-start lg:py-0 xl:max-w-[810px]">
 
@@ -92,15 +95,7 @@ const CouseDetails = () => {
                     </p>
                   </div>
                 </div>
-                <div className="flex w-full flex-col gap-4 border-y border-y-richblack-500 py-4 lg:hidden">
-                  <p className="space-x-3 pb-4 text-3xl font-semibold text-richblack-5">
-                    Rs. {couseData.price}
-                  </p>
-                  <button className="yellowButton">
-                    Buy Now
-                  </button>
-                  <button className="blackButton">Add to Cart</button>
-                </div>
+                
               </div>
               {/* Courses Card */}
               <div className="right-[1rem] top-[60px] mx-auto hidden min-h-[600px] w-1/3 max-w-[410px] translate-y-24 md:translate-y-0 lg:absolute  lg:block">

@@ -3,14 +3,18 @@ import IconButton from '../../common/IconButton'
 import {BsFillCaretRightFill} from "react-icons/bs"
 import {FaShareSquare} from "react-icons/fa"
 import {useSelector} from "react-redux"
-import {useNavigate} from "react-router-dom"
+import {useNavigate, useParams} from "react-router-dom"
 import {toast} from "react-hot-toast"
+import { buyCourse } from '../../../service/operation/Payment'
 
 const CourseDetailsCard = ({course,setModalData}) => {
-  const {token} = useSelector((state) => state.auth)
-  const navigate = useNavigate()
 
-  const handleBuyNow = () => {
+  const navigate = useNavigate()
+  const { couseId } = useParams()
+  const {token} = useSelector((state) => state.auth);
+  const {user} = useSelector((state) => state.profile)
+
+  const handleBuyNow = async() => {
     if(!token){
       setModalData({
         text1:"You are not logged in!?",
@@ -21,6 +25,8 @@ const CourseDetailsCard = ({course,setModalData}) => {
         handlear2:() => setModalData(null)
        })
     }
+
+   await buyCourse({courses:[couseId]},token,user)
   }
 
   const handleCart = () => {
