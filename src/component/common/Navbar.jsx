@@ -6,11 +6,15 @@ import { useSelector } from 'react-redux'
 import { BsChevronDown } from "react-icons/bs"
 import ProfileDropdown from '../core/auth/ProfileDropdown'
 import { fetchAllCategories } from '../../service/operation/Course'
+import {AiOutlineShoppingCart} from "react-icons/ai"
 
 const Navbar = () => {
 
   const location = useLocation();
   const { token } = useSelector((state) => state.auth);
+  const {user} = useSelector((state)=> state.profile);
+  const {cart} = useSelector((state) => state.cart)
+  
   const [subLinks,setSublinks] = useState();
 
   const checkLocation = (route) => {
@@ -120,7 +124,17 @@ const Navbar = () => {
               </button>
             </Link>
           )}
-
+           
+           {user && user?.accountType === "Student" && (
+            <Link to="/dashboard/cart" className="relative">
+              <AiOutlineShoppingCart className="text-2xl text-richblack-100" />
+              {cart.length > 0 && (
+                <span className="absolute -bottom-2 -right-2 grid h-5 w-5 place-items-center overflow-hidden rounded-full bg-richblack-600 text-center text-xs font-bold text-yellow-100">
+                  {cart.length}
+                </span>
+              )}
+            </Link>
+          )} 
           {token && <ProfileDropdown/>}
         </div>
 

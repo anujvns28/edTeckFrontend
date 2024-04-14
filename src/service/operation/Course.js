@@ -15,7 +15,8 @@ const {
   GET_ALL_INSTRUCTOR_COURSES_API,
   DELETE_COURSE_API,
   GET_FULL_COURSE_DETAILS_AUTHENTICATED,
-  COURSE_DETAILS_API
+  COURSE_DETAILS_API,
+  
 } = courseEndpoints
 
 // fetching all categories api

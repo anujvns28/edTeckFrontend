@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 import { apiConnector } from "../apiConnector";
 import { paymentEndpoints } from "../api";
 import rgpLogo from "../../assets/Logo/rzp_logo.png"
+import { resetCart } from "../../slices/cartSlice";
 
 const {COURSE_PAYMENT_API,COURSE_VERIFY_API} = paymentEndpoints;
 
@@ -21,7 +22,7 @@ const loadScript = (src) => {
     })
 }
 
-export const buyCourse = async(data,token,user_details) => {
+export const buyCourse = async(data,token,user_details,navigate,dispatch) => {
     const {courses} = data
     const toastId = toast.loading("Loading...")
     try{
@@ -54,7 +55,7 @@ export const buyCourse = async(data,token,user_details) => {
       email: user_details.email,
     }, 
         handler: function (response){
-            verifyPayment({...response,courses},token)
+            verifyPayment({...response,courses},token,navigate,dispatch)
         },
         
 };
@@ -75,7 +76,7 @@ export const buyCourse = async(data,token,user_details) => {
 
 
 // Verify the Payment
-async function  verifyPayment(bodyData, token) {
+async function  verifyPayment(bodyData, token,navigate,dispatch) {
     console.log(bodyData,"this is body data")
     const toastId = toast.loading("Verifying Payment...")
     
@@ -91,7 +92,10 @@ async function  verifyPayment(bodyData, token) {
       }
   
       toast.success("Payment Successful. You are Added to the course ")
-      
+      navigate("/dashboard/enrolled-courses")
+      if(dispatch){
+        dispatch(resetCart())
+      }
     } catch (error) {
       console.log("PAYMENT VERIFY ERROR............", error)
       toast.error("Could Not Verify Payment.")

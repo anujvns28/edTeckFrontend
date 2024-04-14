@@ -2,15 +2,17 @@ import React from 'react'
 import IconButton from '../../common/IconButton'
 import {BsFillCaretRightFill} from "react-icons/bs"
 import {FaShareSquare} from "react-icons/fa"
-import {useSelector} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 import {useNavigate, useParams} from "react-router-dom"
 import {toast} from "react-hot-toast"
 import { buyCourse } from '../../../service/operation/Payment'
+import { addToCart } from '../../../slices/cartSlice'
 
 const CourseDetailsCard = ({course,setModalData}) => {
 
   const navigate = useNavigate()
   const { couseId } = useParams()
+  const dispatch = useDispatch();
   const {token} = useSelector((state) => state.auth);
   const {user} = useSelector((state) => state.profile)
 
@@ -24,11 +26,16 @@ const CourseDetailsCard = ({course,setModalData}) => {
         handlear1:() => navigate("/login"),
         handlear2:() => setModalData(null)
        })
+       return
     }
+  if(course.studentsEnroled.includes(user._id)){
+  navigate(`/view-course/${course?._id}/section/${course.courseContent?.[0]?._id}/sub-section/${course.courseContent?.[0]?.subSection?.[0]?._id}`)
+  return
+  }  
 
-   await buyCourse({courses:[couseId]},token,user)
+   await buyCourse({courses:[couseId]},token,user,navigate)
   }
-
+  
   const handleCart = () => {
     if(!token){
       setModalData({
@@ -39,8 +46,12 @@ const CourseDetailsCard = ({course,setModalData}) => {
         handlear1:() => navigate("/login"),
         handlear2:() => setModalData(null)
        })
+       return
     }
+    dispatch(addToCart(course))
   }
+
+  console.log(course.studentsEnroled)
   return (
     <>
       <div
@@ -62,7 +73,7 @@ const CourseDetailsCard = ({course,setModalData}) => {
             onClick={handleBuyNow}
               className="cursor-pointer rounded-md bg-yellow-50 px-[20px] py-[8px] font-semibold text-richblack-900"
             >
-            Buy Now
+           {user && course.studentsEnroled.includes(user._id) ? "Go To Course" : "Buy Now"}
             </button>
 
             <button

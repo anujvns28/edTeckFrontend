@@ -12,7 +12,7 @@ import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
 import MyProfile from './component/core/dashboard/MyProfile';
 import EnrolledCourses from './component/core/dashboard/EnrolledCourses';
-import Cart from './component/core/dashboard/Cart';
+import Cart from './component/core/dashboard/Cart/Cart';
 import Setting from './component/core/dashboard/setting/Setting';
 import OpenRoute from './component/core/auth/OpenRoute';
 import PrivateRoute from './component/core/auth/PrivateRoute';
@@ -21,6 +21,9 @@ import MyCourses from './component/core/dashboard/InstructorCourses/MyCourses';
 import EditCourse from './component/core/dashboard/EditCourse/EditCourse';
 import Catlog from './pages/Catlog';
 import CouseDetails from './pages/CouseDetails';
+import ViewCourse from './pages/ViewCourse';
+import VideoSection from './component/core/viewCourse/VideoSectionSidebar';
+import VideoDetail from './component/core/viewCourse/VideoDetail';
 
 
 function App() {
@@ -92,6 +95,12 @@ function App() {
 
         <Route path='/catalog/:catlogName' element={<Catlog/>} />
         <Route path='/courses/:couseId' element={<CouseDetails/>} />
+
+
+        <Route element={<ViewCourse/>} >
+          <Route  path="view-course/:courseId/take"
+          element={<VideoDetail/>}/>
+        </Route>
       </Routes>
     </div>
   );
