@@ -14,7 +14,7 @@ const Navbar = () => {
   const { token } = useSelector((state) => state.auth);
   const {user} = useSelector((state)=> state.profile);
   const {cart} = useSelector((state) => state.cart)
-  
+    
   const [subLinks,setSublinks] = useState();
 
   const checkLocation = (route) => {

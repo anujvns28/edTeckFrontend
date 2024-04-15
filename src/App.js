@@ -98,7 +98,7 @@ function App() {
 
 
         <Route element={<ViewCourse/>} >
-          <Route  path="view-course/:courseId/take"
+          <Route  path="view-course/:courseId/:lectureId"
           element={<VideoDetail/>}/>
         </Route>
       </Routes>

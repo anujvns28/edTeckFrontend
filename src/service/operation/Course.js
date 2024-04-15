@@ -16,7 +16,7 @@ const {
   DELETE_COURSE_API,
   GET_FULL_COURSE_DETAILS_AUTHENTICATED,
   COURSE_DETAILS_API,
-  
+  FETCh_SUBSECTION_API
 } = courseEndpoints
 
 // fetching all categories api
@@ -317,5 +317,30 @@ export const fetchCourseDetails = async (courseId) => {
   }
   toast.dismiss(toastId)
   //   dispatch(setLoading(false));
+  return result
+}
+
+
+// fetching all categories api
+export const fetchSubSection = async(data,token) => {
+  let result
+  try {
+    const response = await apiConnector(
+      "POST",
+      FETCh_SUBSECTION_API,
+      data,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    )
+    result = response.data
+    console.log("Geting lecture API RESPONSE............", response)
+
+    if (!response.data.success) {
+      throw new Error(response.data.message)
+    }
+  } catch (error) {
+    console.log("lecture API ERROR............", error)
+  }
   return result
 }

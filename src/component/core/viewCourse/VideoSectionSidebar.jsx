@@ -8,10 +8,10 @@ import IconButton from '../../common/IconButton';
 import { MdOutlineOndemandVideo } from "react-icons/md";
 
 const VideoSectionSidebar = () => {
-  const { courseId } = useParams();
+  const { courseId ,lectureId} = useParams();
   const { token } = useSelector((state) => state.auth);
   const [courseDetail, setCourseDetail] = useState();
-  const [activeSection,setActiveSection] = useState([]);
+  const [activeSection,setActiveSection] = useState();
 
   const navigate = useNavigate();
 
@@ -19,33 +19,28 @@ const VideoSectionSidebar = () => {
     const result = await getFullDetailsOfCourse(courseId, token);
     if (result) {
       setCourseDetail(result.courseDetails);
+       setActiveSection([result.courseDetails.courseContent[0]._id])
     }
   }
 
   const handleActiveSection = (sectionId) => {
     let arr = [...activeSection];
-    console.log(arr,"this is arr")
     const index = arr.findIndex((item) => item === sectionId);
-    if(index > 1){
-      arr.push(sectionId);
+    console.log(index)
+    if(index >= 0){
+      arr.splice(index,1)
       setActiveSection(arr);
     }else{
-      arr.splice(index,1)
+      arr.push(sectionId)
       setActiveSection(arr);
     }
   }
 
-  console.log(activeSection,"this activ")
-
   useEffect(() => {
     fetchCourseDetail();
-    if(courseDetail){
-      setActiveSection(courseDetail.courseContent[0]._id)
-    }
   }, [courseId])
 
-  console.log(activeSection)
-
+  
   return (
     <>
       <div className="flex h-[calc(100vh-3.5rem)] w-[320px] max-w-[350px] flex-col border-r-[1px] border-r-richblack-700 bg-richblack-800">
@@ -98,10 +93,15 @@ const VideoSectionSidebar = () => {
             {/* subsection */}
             {
               activeSection.includes(section._id) &&
-              <div className="transition-[height] duration-500 ease-in-out">
+              <div 
+               className="transition-[height] duration-5000 ease-in-out">
               {section.subSection.map((subSection, i) => (
-                <div
-                  className={`flex gap-3 items-center px-5 py-2 bg-richblack-900`}
+                <div onClick={() => navigate(`/view-course/${courseId}/${subSection._id}`)}
+                className={`flex gap-3  px-5 py-2 ${
+                  lectureId === subSection._id
+                    ? "bg-yellow-200 font-semibold text-richblack-800"
+                    : "hover:bg-richblack-900"
+                } `}
                   key={i}
                 >
                   <MdOutlineOndemandVideo/>

@@ -55,7 +55,7 @@ const EnrolledCourses = () => {
               className="flex w-[45%] cursor-pointer items-center gap-4 px-5 py-3"
               onClick={() => {
                 navigate(
-                  `/view-course/${course?._id}/take`
+                  `/view-course/${course?._id}/${course.courseContent[0].subSection[0]._id}`
                 )
               }}
             >

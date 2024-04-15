@@ -19,7 +19,7 @@ export default function Cart() {
         <div className="mt-8 flex flex-col-reverse items-start gap-x-10 gap-y-6 lg:flex-row">
           <RenderCartCourses />
           <RenderTotalAmount />
-        </div>
+        </div> 
       ) : (
         <p className="mt-14 text-center text-3xl text-richblack-100">
           Your cart is empty
