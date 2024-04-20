@@ -6,12 +6,14 @@ import {IoIosArrowBack} from "react-icons/io"
 import {BsChevronDown} from "react-icons/bs"
 import IconButton from '../../common/IconButton';
 import { MdOutlineOndemandVideo } from "react-icons/md";
+import CourseReviewModal from './CourseReviewModal';
 
 const VideoSectionSidebar = () => {
   const { courseId ,lectureId} = useParams();
   const { token } = useSelector((state) => state.auth);
   const [courseDetail, setCourseDetail] = useState();
   const [activeSection,setActiveSection] = useState();
+  const [reviewModal,setReviewModal] = useState();
 
   const navigate = useNavigate();
 
@@ -63,6 +65,7 @@ const VideoSectionSidebar = () => {
             </div>
             <IconButton
               active={true}
+              handlear={() => setReviewModal(true)}
               text="Add Review"
             />
           </div>
@@ -118,6 +121,7 @@ const VideoSectionSidebar = () => {
         {/* main div */}
         </div>
       }
+      {reviewModal && <CourseReviewModal setReviewModal={setReviewModal} courseId={courseId}/>}
       </div>
     </>
   )

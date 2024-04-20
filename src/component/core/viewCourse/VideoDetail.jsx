@@ -58,6 +58,10 @@ const VideoDetail = () => {
     setIsRunningLecture(false)
   }
 
+  const handlePlay = () => {
+    setIsRunningLecture(false)
+  }
+
   useEffect(() => {
     fetchLectureData();
   }, [lectureId])
@@ -72,13 +76,14 @@ const VideoDetail = () => {
     <div className='w-full h-full flex items-center justify-center  flex-col gap-5 text-white'>
       {
         !lectureData ? <div className='text-white'>Loading...</div>
-        : <div className='w-full h-full overflow-y-hidden'>
+        : <div className='  overflow-y-hidden'>
           <video
            ref={videoRef}
            className='w-full h-full'
            src={lectureData.videoUrl}
            autoPlay
            controls
+           onPlay={handlePlay}
            onEnded={() => setIsRunningLecture(true)}
           />
         </div>
@@ -86,7 +91,7 @@ const VideoDetail = () => {
       {
         isRunningLecture && <div
         
-        className="w-full  border-solid border-black absolute "
+        className="border-solid border-black absolute "
       >     
         <IconButton
           text="Rewatch"
