@@ -2,6 +2,7 @@ import React from "react"
 import ContactDetails from "../component/core/contact/ContactDetails"
 import ContactUsForm from "../component/core/contact/ContactUsForm"
 import Footer from "../component/common/Footer"
+import RatingReviewSlider from "../component/common/RatingReviewSlider"
 
 
 const Contact = () => {
@@ -24,6 +25,9 @@ const Contact = () => {
           Reviews from other learners
         </h1>
         
+      </div>
+      <div className='max-w-maxContent mx-auto w-full'>
+      <RatingReviewSlider/>
       </div>
       <Footer />
     </div>

@@ -9,6 +9,7 @@ import ReactMarkdown from "react-markdown"
 import CourseAccordionBar from '../component/core/course/CourseAccordionBar';
 import {useSelector} from "react-redux"
 import ConfirmationModal from "../component/common/ConfirmationModal"
+import RatingReviewSlider from '../component/common/RatingReviewSlider';
 
 const CouseDetails = () => {
   const {token} = useSelector((state) => state.auth);
@@ -178,10 +179,17 @@ const CouseDetails = () => {
 
             </div>
 
-
+           
           </div>
         </div>
       }
+
+<div className='max-w-maxContent mx-auto w-full text-white'>
+      <h1 className="text-center text-4xl font-semibold mt-4">
+          Reviews from other learners
+        </h1>
+      <RatingReviewSlider/>
+      </div>
 
       {modalData && <ConfirmationModal modalData={modalData}/> }
       <Footer />

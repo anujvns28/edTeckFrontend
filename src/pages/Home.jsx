@@ -11,14 +11,15 @@ import TimelineSection from '../component/core/homePage/TimelineSection'
 import LearningLanguageSection from '../component/core/homePage/LearningLanguageSection'
 import InstructorSection from '../component/core/homePage/InstructorSection'
 import { useSelector } from 'react-redux'
+import RatingReviewSlider from '../component/common/RatingReviewSlider'
 
 const Home = () => {
-    const {token} = useSelector((state) => state.auth);
-    const {user} = useSelector((state) => state.profile);
+    const { token } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.profile);
 
-    console.log(token,user,"printing.....")
+    console.log(token, user, "printing.....")
 
-    
+
     return (
         <div className='w-full h-full '>
             {/* section 1 */}
@@ -150,27 +151,34 @@ const Home = () => {
                 </div>
 
                 <div className='flex flex-row justify-between py-12 mb-9 gap-8 w-11/12 max-w-maxContent mx-auto'>
-                  <div className='text-4xl font-semibold w-[45%]'>
-                  Get the skills you need for a <HighlightText text={"job that is in demand."}/>
-                  </div>
-
-                  <div className='flex flex-col gap-10 w-[40%]'>
-                    <p>The modern StudyNotion is the dictates its own terms. Today, to be a competitive specialist requires more than professional skills.</p>
-                    <div className='w-fit'>
-                    <CTAButton active={true} location={'/signup'} >
-                        Learn More
-                    </CTAButton>
+                    <div className='text-4xl font-semibold w-[45%]'>
+                        Get the skills you need for a <HighlightText text={"job that is in demand."} />
                     </div>
-                  </div>
+
+                    <div className='flex flex-col gap-10 w-[40%]'>
+                        <p>The modern StudyNotion is the dictates its own terms. Today, to be a competitive specialist requires more than professional skills.</p>
+                        <div className='w-fit'>
+                            <CTAButton active={true} location={'/signup'} >
+                                Learn More
+                            </CTAButton>
+                        </div>
+                    </div>
                 </div>
 
-                <TimelineSection/>
+                <TimelineSection />
 
-                <LearningLanguageSection/>
+                <LearningLanguageSection />
+
             </div>
-            
-            <InstructorSection/>
 
+            <InstructorSection />
+             <div className='max-w-maxContent mx-auto'>
+             <h1 className="text-center text-4xl font-semibold mt-8 text-white">
+                    Reviews from other learners
+                </h1>
+                <RatingReviewSlider />
+ 
+             </div>
             <Footer />
         </div>
     )

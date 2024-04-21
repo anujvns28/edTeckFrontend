@@ -1,5 +1,5 @@
 import toast from "react-hot-toast"
-import {categories, courseEndpoints} from "../api"
+import {categories, courseEndpoints, ratingEndpoints} from "../api"
 import { apiConnector } from "../apiConnector"
 
 const {CATEGORIES_API} = categories
@@ -19,6 +19,10 @@ const {
   FETCh_SUBSECTION_API,
   CREATE_RATING_API
 } = courseEndpoints
+
+const  {GET_ALLRATTING_API} = ratingEndpoints
+
+
 
 // fetching all categories api
 export const fetchAllCategories = async() => {
@@ -368,4 +372,19 @@ export const createRating = async (data, token) => {
   }
   toast.dismiss(toastId)
   return success
+}
+
+
+// Get all rating for course
+export const fetchAllRating = async () => {
+  let result
+  try {
+    const response = await apiConnector("GET",GET_ALLRATTING_API )
+    console.log("get all RATING API RESPONSE............", response)
+    result = response.data.data
+   
+  } catch (error) {
+    console.log("CREATE RATING API ERROR............", error)
+  }
+  return result
 }

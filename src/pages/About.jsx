@@ -9,11 +9,12 @@ import StatsComponenet from '../component/core/about/StatsComponenet'
 import Footer from '../component/common/Footer'
 import LearningGrid from '../component/core/about/LearningGrid'
 import ContactFormSection from '../component/core/about/ContactFormSection'
+import RatingReviewSlider from '../component/common/RatingReviewSlider'
 
 
 const About = () => {
   return (
-    <div>
+    <div className='w-full'>
       <section className="bg-richblack-700">
         <div className="relative mx-auto flex w-11/12 max-w-maxContent flex-col justify-between gap-10 text-center text-white">
           <header className="mx-auto py-20 text-4xl font-semibold lg:w-[70%]">
@@ -108,12 +109,14 @@ const About = () => {
         <ContactFormSection/>
       </section>
 
-      <div className="relative mx-auto my-20 flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 bg-richblack-900 text-white">
+      <div className=" mx-auto my-20 flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 bg-richblack-900 text-white">
         <h1 className="text-center text-4xl font-semibold mt-8">
           Reviews from other learners
         </h1>
       </div>
-      
+      <div className='max-w-maxContent mx-auto w-full'>
+      <RatingReviewSlider/>
+      </div>
     <Footer/>
     </div>
   )
