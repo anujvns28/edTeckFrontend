@@ -125,7 +125,7 @@ const Navbar = () => {
             </Link>
           )}
            
-           {user && user?.accountType === "Student" && (
+           {token && user?.accountType === "Student" && (
             <Link to="/dashboard/cart" className="relative">
               <AiOutlineShoppingCart className="text-2xl text-richblack-100" />
               {cart.length > 0 && (

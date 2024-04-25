@@ -20,7 +20,7 @@ const {
   CREATE_RATING_API
 } = courseEndpoints
 
-const  {GET_ALLRATTING_API} = ratingEndpoints
+const  {GET_ALLRATTING_API,GET_AVERAGERATTING_API} = ratingEndpoints
 
 
 
@@ -385,6 +385,21 @@ export const fetchAllRating = async () => {
    
   } catch (error) {
     console.log("CREATE RATING API ERROR............", error)
+  }
+  return result
+}
+
+
+// Get all rating for course
+export const fetchAverageRatting = async (data) => {
+  let result
+  try {
+    const response = await apiConnector("POST",GET_AVERAGERATTING_API,{courseId:data} )
+    console.log("get average RATING API RESPONSE............", response)
+    result = response.data
+   
+  } catch (error) {
+    console.log("average RATING API ERROR............", error)
   }
   return result
 }

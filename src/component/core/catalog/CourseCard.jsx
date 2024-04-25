@@ -1,7 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { fetchAverageRatting } from '../../../service/operation/Course';
+import ReactStars from "react-rating-stars-component";
 
 const CourseCard = ({ course, Height }) => {
+  const [avgReviewCount, setAvgReviewCount] = useState();
+
+  const getAverageRatting = async () => {
+    const result = await fetchAverageRatting(course._id)
+    if (result) {
+      setAvgReviewCount(result.averageRating);
+    }
+  }
+
+  useEffect(() => {
+    getAverageRatting();
+  },[])
   return (
     <div>
       <>
@@ -19,7 +33,36 @@ const CourseCard = ({ course, Height }) => {
             <p className="text-sm text-richblack-50">
               {course?.instructor?.firstName} {course?.instructor?.lastName}
             </p>
+
+            {
+              avgReviewCount ? 
+              <div className="text-md flex flex-wrap items-center gap-2">
+                    <span className="text-yellow-25">{avgReviewCount}</span>
+                    <ReactStars
+                     count={5}
+                     size={24}
+                     edit={false}
+                     value={5}
+                     emptyIcon={<i className="fa fa-star"></i>}
+                     fullIcon={<i className="far fa-star"></i>}
+                     activeColor="#ffd700"
+                    />
+                    
+                  </div>
+            : <div className="text-md flex flex-wrap items-center gap-2">
+            <span className="text-yellow-25">0</span>
+            <ReactStars
+             count={5}
+             size={24}
+             edit={false}
+             value={0}
+             emptyIcon={<i className="far fa-star"></i>}
+             fullIcon={<i className="fa fa-star"></i>}
+             activeColor="#ffd700"
+            />
             
+          </div>
+            }
             <p className="text-xl text-richblack-5">Rs. {course?.price}</p>
           </div>
         </div>

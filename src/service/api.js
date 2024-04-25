@@ -65,5 +65,6 @@ export const profileEndpoints = {
 
 // RATING EDN POINTS
 export const ratingEndpoints = {
-  GET_ALLRATTING_API : BASE_URL + "/course/getReviews"
+  GET_ALLRATTING_API : BASE_URL + "/course/getReviews",
+  GET_AVERAGERATTING_API : BASE_URL + "/course/getAverageRating"
 }

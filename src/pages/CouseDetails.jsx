@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { BiInfoCircle } from "react-icons/bi"
 import { HiOutlineGlobeAlt } from "react-icons/hi"
-import { fetchCourseDetails } from '../service/operation/Course';
+import { fetchAverageRatting, fetchCourseDetails } from '../service/operation/Course';
 import Footer from '../component/common/Footer';
 import { useParams } from "react-router-dom"
 import CourseDetailsCard from '../component/core/course/CourseDetailsCard';
 import ReactMarkdown from "react-markdown"
 import CourseAccordionBar from '../component/core/course/CourseAccordionBar';
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux"
 import ConfirmationModal from "../component/common/ConfirmationModal"
 import RatingReviewSlider from '../component/common/RatingReviewSlider';
+import ReactStars from "react-rating-stars-component";
 
 const CouseDetails = () => {
-  const {token} = useSelector((state) => state.auth);
-  const {user} = useSelector((state) => state.profile)
+  const { token } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.profile)
   const [couseData, setCouseData] = useState();
-  const [isActive,setIsActive] = useState([]);
+  const [isActive, setIsActive] = useState([]);
   const { couseId } = useParams()
 
-  const [modalData,setModalData] = useState();
-  const [loading,setLoading] = useState(false);
+  const [modalData, setModalData] = useState();
+  const [avgReviewCount, setAvgReviewCount] = useState();
+  const [loading, setLoading] = useState(false);
 
   const fetchCouseData = async () => {
     setLoading(true)
@@ -32,18 +34,17 @@ const CouseDetails = () => {
 
   const handleActive = (section_id) => {
     let arr = [...isActive]
-   const index =  arr.findIndex((item) => item == section_id);
-   
-   if(index >= 0){
-    arr.splice(index,1)
-    setIsActive(arr);
-   }else{
-    arr.push(section_id);
-    setIsActive(arr);
-   }
-   }
-  
-  console.log(isActive,"pritng is active")
+    const index = arr.findIndex((item) => item == section_id);
+
+    if (index >= 0) {
+      arr.splice(index, 1)
+      setIsActive(arr);
+    } else {
+      arr.push(section_id);
+      setIsActive(arr);
+    }
+  }
+
 
   const formatDate = (dateString) => {
     const dateObject = new Date(dateString);
@@ -51,10 +52,19 @@ const CouseDetails = () => {
     return dateObject.toLocaleDateString('en-US', options);
   };
 
+  const getAverageRatting = async () => {
+    const result = await fetchAverageRatting(couseId)
+    if (result) {
+      setAvgReviewCount(result.averageRating);
+    }
+  }
+
 
   useEffect(() => {
     fetchCouseData();
+    getAverageRatting();
   }, [])
+
 
   return (
     <>
@@ -74,12 +84,20 @@ const CouseDetails = () => {
                     </p>
                   </div>
                   <p className={`text-richblack-200`}>{couseData.courseDescription}</p>
-                  {/* <div className="text-md flex flex-wrap items-center gap-2">
-            <span className="text-yellow-25">{avgReviewCount}</span>
-            <RatingStars Review_Count={avgReviewCount} Star_Size={24} />
-            <span>{`(${ratingAndReviews.length} reviews)`}</span>
-            <span>{`${studentsEnroled.length} students enrolled`}</span>
-          </div> */}
+                  <div className="text-md flex flex-wrap items-center gap-2">
+                    <span className="text-yellow-25">{avgReviewCount}</span>
+                    <ReactStars
+                      count={5}
+                      size={24}
+                      edit={false}
+                      value={avgReviewCount}
+                      emptyIcon={<i className="far fa-star"></i>}
+                      fullIcon={<i className="fa fa-star"></i>}
+                      activeColor="#ffd700"
+                    />
+                    <span>{`(${couseData?.ratingAndReviews.length} reviews)`}</span>
+            <span>{`${couseData?.studentsEnroled.length} students enrolled`}</span>
+                  </div>
                   <div>
                     <p className="">
                       Created By {`${couseData.instructor.firstName} ${couseData.instructor.lastName}`}
@@ -96,7 +114,7 @@ const CouseDetails = () => {
                     </p>
                   </div>
                 </div>
-                
+
               </div>
               {/* Courses Card */}
               <div className="right-[1rem] top-[60px] mx-auto hidden min-h-[600px] w-1/3 max-w-[410px] translate-y-24 md:translate-y-0 lg:absolute  lg:block">
@@ -179,19 +197,19 @@ const CouseDetails = () => {
 
             </div>
 
-           
+
           </div>
         </div>
       }
 
-<div className='max-w-maxContent mx-auto w-full text-white'>
-      <h1 className="text-center text-4xl font-semibold mt-4">
+      <div className='max-w-maxContent mx-auto w-full text-white'>
+        <h1 className="text-center text-4xl font-semibold mt-4">
           Reviews from other learners
         </h1>
-      <RatingReviewSlider/>
+        <RatingReviewSlider />
       </div>
 
-      {modalData && <ConfirmationModal modalData={modalData}/> }
+      {modalData && <ConfirmationModal modalData={modalData} />}
       <Footer />
 
     </>
