@@ -24,6 +24,7 @@ import CouseDetails from './pages/CouseDetails';
 import ViewCourse from './pages/ViewCourse';
 import VideoSection from './component/core/viewCourse/VideoSectionSidebar';
 import VideoDetail from './component/core/viewCourse/VideoDetail';
+import Instructor from './component/core/dashboard/Instructor';
 
 
 function App() {
@@ -91,6 +92,7 @@ function App() {
           <Route path='dashboard/add-course' element={<AddCourse/>} />
           <Route path='dashboard/my-courses' element={<MyCourses/>} />
           <Route path='dashboard/edit-course/:courseId' element={<EditCourse/>} />
+          <Route path='dashboard/instructor' element={<Instructor/>} />
         </Route>
 
         <Route path='/catalog/:catlogName' element={<Catlog/>} />
