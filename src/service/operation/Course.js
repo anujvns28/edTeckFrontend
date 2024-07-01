@@ -302,7 +302,7 @@ export const getFullDetailsOfCourse = async (courseId, token) => {
 }
 
 export const fetchCourseDetails = async (courseId) => {
-  const toastId = toast.loading("Loading...")
+  
   //   dispatch(setLoading(true));
   let result = null
   try {
@@ -320,8 +320,7 @@ export const fetchCourseDetails = async (courseId) => {
     result = error.response.data
     // toast.error(error.response.data.message);
   }
-  toast.dismiss(toastId)
-  //   dispatch(setLoading(false));
+ 
   return result
 }
 
@@ -403,3 +402,5 @@ export const fetchAverageRatting = async (data) => {
   }
   return result
 }
+
+

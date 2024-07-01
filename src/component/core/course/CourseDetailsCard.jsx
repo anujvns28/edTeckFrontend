@@ -29,7 +29,7 @@ const CourseDetailsCard = ({course,setModalData}) => {
        return
     }
   if(course.studentsEnroled.includes(user._id)){
-  navigate(`/view-course/${course?._id}/section/${course.courseContent?.[0]?._id}/sub-section/${course.courseContent?.[0]?.subSection?.[0]?._id}`)
+  navigate(`/view-course/${course?._id}/${course.courseContent[0].subSection[0]._id}`)
   return
   }  
 

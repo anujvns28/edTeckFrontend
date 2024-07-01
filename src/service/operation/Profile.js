@@ -124,7 +124,7 @@ export const updateProfile = async(token,data,navigate,dispatch) => {
 
 
   export async function getInstructorData(token) {
-    const toastId = toast.loading("Loading...")
+    
     let result = []
     try {
       const response = await apiConnector("GET", GET_INSTRUCTOR_DATA_API, null, {
@@ -136,6 +136,6 @@ export const updateProfile = async(token,data,navigate,dispatch) => {
       console.log("GET_INSTRUCTOR_DATA_API API ERROR............", error)
       toast.error("Could Not Get Instructor Data")
     }
-    toast.dismiss(toastId)
+    
     return result
   }

@@ -19,6 +19,7 @@ const CourseReviewModal = ({setReviewModal,courseId}) => {
         review:data.courseExperience
      }
     await createRating(reviewData,token)
+    setReviewModal(false)
      console.log(reviewData,"this is data")
     }
 
