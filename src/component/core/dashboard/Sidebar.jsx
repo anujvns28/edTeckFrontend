@@ -15,6 +15,8 @@ const Sidebar = () => {
     icon:"VscSettingsGear"
   }
 
+  console.log(user, "usere");
+
   const [modalData,setModalData] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();

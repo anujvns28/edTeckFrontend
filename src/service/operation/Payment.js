@@ -64,6 +64,7 @@ export const buyCourse = async(data,token,user_details,navigate,dispatch) => {
     rzp1.open();
     rzp1.on('payment.failed', function (response){
         alert(response.error.code);
+        console.log(response);
 });
 
 

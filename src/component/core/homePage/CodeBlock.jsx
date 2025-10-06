@@ -36,7 +36,7 @@ const CodeBlock = ({
           <p>9</p>
           <p>10</p>
           <p>11</p>
-        </div>
+    </div>
 
        <div className={`w-[90%] flex flex-col gap-2 font-bold font-mono ${codeColor} pr-1`}>
        <TypeAnimation
