@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+// @ts-ignore
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux'
@@ -12,13 +13,16 @@ export const store = configureStore({
   reducer: rootReducer,
 })
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
+
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <BrowserRouter>
-  <Provider store={store}>
-  <App />
-  <Toaster/>
-  </Provider>
+    <Provider store={store}>
+    <App />
+    <Toaster/>
+    </Provider>
   </BrowserRouter>
 );
 

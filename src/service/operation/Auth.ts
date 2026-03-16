@@ -1,0 +1,156 @@
+import { apiConnector } from "../apiConnector";
+import { setToken } from "../../slices/authSlice";
+import toast from "react-hot-toast";
+import { setProfile } from "../../slices/profileSlice";
+import { authEndPoinds } from "../api";
+import { NavigateFunction } from "react-router-dom";
+import { User } from "../../types/user";
+import { AppDispatch } from "../..";
+import React from "react";
+
+const {
+  LOGIN_API,
+  SENDOTP_API,
+  SIGNUP_API,
+  RESETPASSTOKEN_API,
+  RESETPASSWORD_API,
+} = authEndPoinds;
+
+type LoginData = {
+  email: string;
+  password: string;
+};
+
+export async function sendOtp(
+  email: string,
+  navigate: NavigateFunction,
+): Promise<void> {
+  const toastId = toast.loading("Loading...");
+  try {
+    const response = await apiConnector("POST", SENDOTP_API, {
+      email,
+      checkUserPresent: true,
+    });
+    console.log("SENDOTP API RESPONSE............", response);
+
+    console.log(response.data.success);
+
+    if (!response.data.success) {
+      throw new Error(response.data.message);
+    }
+
+    toast.success("OTP Sent Successfully");
+    navigate("/verify-email");
+  } catch (error: any) {
+    console.log("SENDOTP API ERROR............", error);
+    toast.error("Could Not Send OTP");
+  }
+  toast.dismiss(toastId);
+}
+
+export async function signUp(
+  data: User,
+  navigate: NavigateFunction,
+): Promise<void> {
+  const toastId = toast.loading("Loading...");
+  try {
+    const response = await apiConnector("POST", SIGNUP_API, data);
+
+    console.log("SIGNUP API RESPONSE............", response);
+
+    if (!response.data.success) {
+      throw new Error(response.data.message);
+    }
+    toast.success("Signup Successful");
+    navigate("/login");
+  } catch (error) {
+    console.log("SIGNUP API ERROR............", error);
+    toast.error("Signup Failed");
+  }
+  toast.dismiss(toastId);
+}
+
+export async function login(
+  data: LoginData,
+  navigate: NavigateFunction,
+  dispatch: AppDispatch,
+): Promise<void> {
+  const toastId = toast.loading("Loading...");
+  try {
+    const response = await apiConnector("POST", LOGIN_API, data);
+
+    console.log("LOGIN API RESPONSE............", response);
+
+    if (!response.data.success) {
+      throw new Error(response.data.message);
+    }
+    toast.success("Login Successfull");
+    navigate("/");
+
+    dispatch(setToken(response.data.token));
+    dispatch(setProfile(response.data.user));
+    localStorage.setItem("token", JSON.stringify(response.data.token));
+    localStorage.setItem("user", JSON.stringify(response.data.user));
+  } catch (error: any) {
+    console.log("LOGIN API ERROR............", error);
+    toast.error("Login Failed");
+  }
+
+  toast.dismiss(toastId);
+}
+
+export async function getPasswordResetToken(
+  email: string,
+  setEmailSent: React.Dispatch<React.SetStateAction<boolean>>,
+): Promise<void> {
+  const toastId = toast.loading("Loading...");
+  try {
+    const response = await apiConnector("POST", RESETPASSTOKEN_API, {
+      email,
+    });
+
+    console.log("RESETPASSTOKEN RESPONSE............", response);
+
+    if (!response.data.success) {
+      throw new Error(response.data.message);
+    }
+
+    toast.success("Reset Email Sent");
+    setEmailSent(true);
+  } catch (error) {
+    console.log("RESETPASSTOKEN ERROR............", error);
+    toast.error("Failed To Send Reset Email");
+  }
+  toast.dismiss(toastId);
+}
+
+export async function resetPassword(data:any, navigate:NavigateFunction):Promise<void> {
+  const toastId = toast.loading("Loading...");
+  try {
+    const response = await apiConnector("POST", RESETPASSWORD_API, data);
+
+    console.log("RESETPASSWORD RESPONSE............", response);
+
+    if (!response.data.success) {
+      throw new Error(response.data.message);
+    }
+
+    toast.success("Password Reset Successfully");
+    navigate("/login");
+  } catch (error) {
+    console.log("RESETPASSWORD ERROR............", error);
+    toast.error("Failed To Reset Password");
+  }
+  toast.dismiss(toastId);
+}
+
+export const logout = (dispatch:AppDispatch, navigate:NavigateFunction):void => {
+  const toastId = toast.loading("loading..");
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  dispatch(setToken(null));
+  dispatch(setToken(null));
+  navigate("/");
+  toast.dismiss(toastId);
+  toast.success("Logout Successfully");
+};

@@ -1,22 +1,29 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Course } from '../types/course'
 
-const initialState = {
+type CourseTypeSlice = {
+  step : number 
+  editCourse : boolean,
+  course : Course | null
+} 
+
+const initialState : CourseTypeSlice = {
  step:1,
  editCourse:false,
  course:null
 }
 
-export const courseSlice = createSlice({
+const courseSlice = createSlice({
   name: 'course',
   initialState,
   reducers: {
-    setStep: (state, action) => {
+    setStep: (state, action:PayloadAction<number>) => {
       state.step = action.payload
     },
-    setEditCourse:(state,action) => {
+    setEditCourse:(state,action:PayloadAction<boolean>) => {
       state.editCourse = action.payload
     },
-    setCourse:(state,action)=>{
+    setCourse:(state,action:PayloadAction<Course>)=>{
       state.course = action.payload
     },
     resetCourseState: (state) => {
