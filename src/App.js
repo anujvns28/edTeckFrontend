@@ -21,8 +21,7 @@ import MyCourses from './component/core/dashboard/InstructorCourses/MyCourses';
 import EditCourse from './component/core/dashboard/EditCourse/EditCourse';
 import Catlog from './pages/Catlog';
 import CouseDetails from './pages/CouseDetails';
-import ViewCourse from './pages/ViewCourse';
-import VideoSection from './component/core/viewCourse/VideoSectionSidebar';
+import ViewCourse from "./pages/ViewCourse";
 import VideoDetail from './component/core/viewCourse/VideoDetail';
 import Instructor from './component/core/dashboard/Instructor';
 

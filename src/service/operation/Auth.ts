@@ -27,7 +27,7 @@ export async function sendOtp(
 ): Promise<void> {
   const toastId = toast.loading("Loading...");
   try {
-    const response = await apiConnector("POST", SENDOTP_API, {
+    const response = await apiConnector<any>("POST", SENDOTP_API, {
       email,
       checkUserPresent: true,
     });
@@ -54,7 +54,7 @@ export async function signUp(
 ): Promise<void> {
   const toastId = toast.loading("Loading...");
   try {
-    const response = await apiConnector("POST", SIGNUP_API, data);
+    const response = await apiConnector<any>("POST", SIGNUP_API, data);
 
     console.log("SIGNUP API RESPONSE............", response);
 
@@ -77,7 +77,7 @@ export async function login(
 ): Promise<void> {
   const toastId = toast.loading("Loading...");
   try {
-    const response = await apiConnector("POST", LOGIN_API, data);
+    const response = await apiConnector<any>("POST", LOGIN_API, data);
 
     console.log("LOGIN API RESPONSE............", response);
 
@@ -105,7 +105,7 @@ export async function getPasswordResetToken(
 ): Promise<void> {
   const toastId = toast.loading("Loading...");
   try {
-    const response = await apiConnector("POST", RESETPASSTOKEN_API, {
+    const response = await apiConnector<any>("POST", RESETPASSTOKEN_API, {
       email,
     });
 
@@ -124,10 +124,13 @@ export async function getPasswordResetToken(
   toast.dismiss(toastId);
 }
 
-export async function resetPassword(data:any, navigate:NavigateFunction):Promise<void> {
+export async function resetPassword(
+  data: any,
+  navigate: NavigateFunction,
+): Promise<void> {
   const toastId = toast.loading("Loading...");
   try {
-    const response = await apiConnector("POST", RESETPASSWORD_API, data);
+    const response = await apiConnector<any>("POST", RESETPASSWORD_API, data);
 
     console.log("RESETPASSWORD RESPONSE............", response);
 

@@ -28,13 +28,13 @@ export const getCatalogPageData = async (categoryId:string):Promise<CatalogRespo
   const toastId = toast.loading("Loading...")
   let result : CatalogResponse | null = null
   try {
-    const response = await apiConnector(
+    const response = await apiConnector<any>(
       "POST",
       catalogData.CATALOGPAGEDATA_API,
       {
         categoryId: categoryId,
-      }
-    )
+      },
+    );
     if (!response?.data?.success) {
       throw new Error("Could Not Fetch Catagory page data.")
     }

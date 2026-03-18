@@ -26,14 +26,14 @@ const VideoDetail = () => {
     const result = await getFullDetailsOfCourse(courseId, token);
     let lectureArr = []
     if (result) {
-       setCourseData(result.courseDetails);
-       result.courseDetails.courseContent.map((section) => {
-        if(section.subSection.length > 0){
-          section.subSection.map((subSection) => {
-            lectureArr.push(subSection._id);
-           })
-        }
-       })
+       setCourseData(result.data);
+       result.data.courseContent.map((section) => {
+         if (section.subSection.length > 0) {
+           section.subSection.map((subSection) => {
+             lectureArr.push(subSection._id);
+           });
+         }
+       });
        setAllLecture(lectureArr)
     }
   }

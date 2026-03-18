@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 import { useRouteMatch } from '../../../hooks/useRouteMatch'
 
 const SidebarLink = ({data}) => {
-  console.log(data)
+
     
     const Icon = Icons[data.icon]
 

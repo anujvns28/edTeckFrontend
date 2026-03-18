@@ -83,9 +83,11 @@ const SubSectionModal = ({subSectionModalData,setSubSectionModal}) => {
         const result = await createSubSection(formData,token)
 
         if(result){
-            const updateSection = course.courseContent.map((section) => 
-                section._id == subSectionModalData.sectionId ? result : section
-            )
+            const updateSection = course.courseContent.map((section) =>
+              section._id === subSectionModalData.sectionId
+                ? result.data
+                : section,
+            );
             console.log(updateSection,"update secion")
             
             const updateCourse = {...course,courseContent:updateSection}

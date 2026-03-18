@@ -52,7 +52,7 @@ const CourseBuilderForm = () => {
       );
   
       if(result){
-        dispatch(setCourse(result))
+        dispatch(setCourse(result.data));
         setValue("sectionName","")
       }
     }

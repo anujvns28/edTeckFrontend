@@ -20,8 +20,8 @@ const VideoSectionSidebar = () => {
   const fetchCourseDetail = async () => {
     const result = await getFullDetailsOfCourse(courseId, token);
     if (result) {
-      setCourseDetail(result.courseDetails);
-       setActiveSection([result.courseDetails.courseContent[0]._id])
+      setCourseDetail(result.data);
+      setActiveSection([result.data.courseContent[0]._id]);
     }
   }
 

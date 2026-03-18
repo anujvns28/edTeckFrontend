@@ -12,4 +12,5 @@ const rootReducer = combineReducers({
   course : courseSlice,
 });
 
+export type rootState = ReturnType<typeof rootReducer>;
 export default rootReducer;

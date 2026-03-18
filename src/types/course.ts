@@ -1,19 +1,20 @@
-import { User } from "./user"
+import type { Section } from "./sections";
+import type { User } from "./user";
 
 export type Course = {
-  _id: string
-  courseName: string
-  courseDescription: string
-  instructor: User
-  whatYouWillLearn?: string
-  courseContent: string[]
-  ratingAndReviews: string[]
-  price: number
-  thumbnail: string
-  tag: string[]
-  category?: string
-  studentsEnroled: User[]
-  instructions?: string[]
-  status: "Draft" | "Published"
-  createdAt: string
-}
+  _id: string;
+  courseName: string;
+  courseDescription: string;
+  instructor: User;
+  whatYouWillLearn?: string;
+  courseContent: Section[];
+  ratingAndReviews: string[];
+  price: number;
+  thumbnail: string;
+  tag: string[];
+  category?: string;
+  studentsEnroled: User[];
+  instructions?: string[];
+  status: "Draft" | "Published";
+  createdAt: string;
+};

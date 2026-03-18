@@ -1,14 +1,14 @@
-import axios,{type Method} from "axios";
+import axios, { AxiosResponse, type Method } from "axios";
 
 export const axiosInstance = axios.create({});
 
-export const apiConnector = (
-  method : Method,
-  url:string,
-  bodyData?:unknown,
-  headers?:any , 
-  params?:any
-) => {
+export const apiConnector = async <T>(
+  method: Method,
+  url: string,
+  bodyData?: unknown,
+  headers?: any,
+  params?: any,
+): Promise<AxiosResponse<T>> => {
   return axiosInstance({
     method: `${method}`,
     url: `${url}`,

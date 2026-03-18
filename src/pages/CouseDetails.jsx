@@ -27,7 +27,7 @@ const CouseDetails = () => {
     setLoading(true)
     const result = await fetchCourseDetails(couseId);
     if (result) {
-      setCouseData(result.data?.courseDetails);
+      setCouseData(result.data);
     }
     setLoading(false)
   }
