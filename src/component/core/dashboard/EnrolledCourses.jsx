@@ -16,7 +16,7 @@ const EnrolledCourses = () => {
         const res = await getUserEnrolledCourses(token) 
 
         if(res){
-          setEnrolledCourses(res);
+          setEnrolledCourses(res.data);
         }
       } catch (error) {
         console.log("Could not fetch enrolled courses.")

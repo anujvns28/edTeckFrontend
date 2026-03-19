@@ -1,9 +1,22 @@
 import React from 'react'
 import IconButton from './IconButton'
 
-const ConfirmationModal = ({modalData}) => {
-  
-    
+type ModalData = {
+  text1:string,
+  text2:string,
+  btn1:string,
+  btn2:string,
+  handlear1:() =>void,
+  handlear2:() =>void
+}
+
+type ModalDataProps = {
+  modalData: ModalData | null;
+}
+
+const ConfirmationModal = ({modalData}:ModalDataProps) => {
+  if (!modalData) return null;
+
   return (
     <div className="fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm">
       <div className="w-11/12 max-w-[350px] rounded-lg border border-richblack-400 bg-richblack-800 p-6">
@@ -17,12 +30,13 @@ const ConfirmationModal = ({modalData}) => {
           <IconButton 
           text={modalData.btn1}
           active={true} 
-          handlear={modalData.handlear1}/>
+          handler={modalData.handlear1}/>
 
           <IconButton 
           text={modalData.btn2} 
           active={false} 
-          handlear={modalData.handlear2}/>
+          handler={modalData.handlear2} />
+          
         </div>
       </div>
     </div>

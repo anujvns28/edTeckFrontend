@@ -1,7 +1,7 @@
 import { matchPath, useLocation } from "react-router-dom"
 
 
-export const useRouteMatch = (route) => {
+export const useRouteMatch = (route:string) => {
     const location = useLocation();
 return matchPath(location.pathname,route)
 }

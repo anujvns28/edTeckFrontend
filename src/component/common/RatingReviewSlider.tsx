@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { SetStateAction, useEffect, useState } from 'react'
 import { fetchAllRating } from '../../service/operation/Course';
 import ReactStars from "react-rating-stars-component";
 
@@ -7,15 +7,15 @@ import "swiper/css"
 import "swiper/css/free-mode"
 import "swiper/css/pagination"
 import "../../App.css"
+import { RatingAndReview } from '../../types/ratingandreview';
 
 
 const RatingReviewSlider = () => {
-    const [ratings, setRatings] = useState();
-    const truncateWords = 15
+    const [ratings, setRatings] = useState<SetStateAction<RatingAndReview>>();
     const getAllRating = async () => {
         const result = await fetchAllRating();
         if (result) {
-            setRatings(result)
+            setRatings(result.data);
         }
     }
 

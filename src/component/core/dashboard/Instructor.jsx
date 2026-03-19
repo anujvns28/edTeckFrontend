@@ -8,37 +8,39 @@ import { fetchInstructorCourses } from '../../../service/operation/Course';
 const Instructor = () => {
     const {user} = useSelector((state) => state.profile);
     const {token} = useSelector((state) => state.auth)
-    const [instructorData, setInstructorData] = useState(null)
-    const [courses, setCourses] = useState([])
-    const [loading,setLoading] = useState(false);
+    const [instructorData, setInstructorData] = useState([]);
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    let totalAmount 
-    let totalStudents
+    let totalAmount;
+    let totalStudents;
 
     useEffect(() => {
-      ;(async () => {
-        setLoading(true)
-        const instructorApiData = await getInstructorData(token)
-        const result = await fetchInstructorCourses(token)
-        console.log(instructorApiData)
-        if (instructorApiData.length) setInstructorData(instructorApiData)
+      (async () => {
+        setLoading(true);
+        const instructorApiData = await getInstructorData(token);
+        const result = await fetchInstructorCourses(token);
+        console.log(instructorApiData);
+        if (instructorApiData) setInstructorData(instructorApiData.data);
         if (result) {
-          setCourses(result)
+          setCourses(result.data);
         }
-        setLoading(false)
-      })()
-    }, []) 
 
-  if(instructorData){
-     totalAmount = instructorData.reduce((prev,curr) => {
-      return curr = prev + curr.totalAmountGenerated
-     },0)
-     
-     totalStudents = instructorData.reduce((prev,curr) => {
-      return curr = prev + curr.totalStudentsEnrolled
-     },0)
-  }
+        setLoading(false);
+      })();
+    }, []);
 
+    if (instructorData) {
+      totalAmount = instructorData.reduce((prev, curr) => {
+        return (curr = prev + curr.totalAmountGenerated);
+      }, 0);
+
+      totalStudents = instructorData.reduce((prev, curr) => {
+        return (curr = prev + curr.totalStudentsEnrolled);
+      }, 0);
+    }
+
+    console.log(instructorData, "this is insdata");
     
   return (
     <div>

@@ -5,6 +5,7 @@ import {Chart,registerables} from "chart.js"
 Chart.register(...registerables)
 
 const InstructorChart = ({courses}) => {
+    console.log(courses, "this is iwala");
     const [currChart, setCurrChart] = useState("students")
 
     // Function to generate random colors for the chart
