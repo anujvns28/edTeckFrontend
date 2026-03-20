@@ -29,7 +29,7 @@ const { GET_ALLRATTING_API, GET_AVERAGERATTING_API } = ratingEndpoints;
 type ApiResponse<T> = {
   success: boolean;
   message?: string;
-  data?: T;
+  data: T;
 };
 
 type RatingResponse = {
@@ -42,6 +42,11 @@ type RatingResponse = {
     user: string;
     _id: string;
   };
+};
+
+type AvarageRatingResponse = {
+  averageRating: number;
+  success: boolean;
 };
 
 // fetching all categories api => ts done
@@ -522,34 +527,38 @@ export const createRating = async (
 };
 
 // Get all rating for course
-export const fetchAllRating =
-  async (): Promise<ApiResponse<RatingAndReview> | null> => {
-    try {
-      const response = await apiConnector<ApiResponse<RatingAndReview>>(
-        "GET",
-        GET_ALLRATTING_API,
-      );
-      console.log("get all RATING API RESPONSE............", response);
-      return response.data;
-    } catch (error: unknown) {
-      console.log("CREATE RATING API ERROR............", error);
-      return null;
-    }
-  };
-
+export const fetchAllRating = async (): Promise<ApiResponse<
+  RatingAndReview[]
+> | null> => {
+  try {
+    const response = await apiConnector<ApiResponse<RatingAndReview[]>>(
+      "GET",
+      GET_ALLRATTING_API,
+    );
+    console.log("get all RATING API RESPONSE............", response);
+    return response.data;
+  } catch (error: unknown) {
+    console.log("CREATE RATING API ERROR............", error);
+    return null;
+  }
+};
 
 // Get all rating for course
-export const fetchAverageRatting = async (data:string) => {
-  let result
+export const fetchAverageRatting = async (
+  data: string,
+): Promise<AvarageRatingResponse | null> => {
   try {
-    const response = await apiConnector("POST",GET_AVERAGERATTING_API,{courseId:data} )
-    console.log("get average RATING API RESPONSE............", response)
-    result = response.data
-   
+    const response = await apiConnector<AvarageRatingResponse>(
+      "POST",
+      GET_AVERAGERATTING_API,
+      { courseId: data },
+    );
+    console.log("get average RATING API RESPONSE............", response);
+    return response.data;
   } catch (error) {
-    console.log("average RATING API ERROR............", error)
+    console.log("average RATING API ERROR............", error);
+    return null;
   }
-  return result
-}
+};
 
 

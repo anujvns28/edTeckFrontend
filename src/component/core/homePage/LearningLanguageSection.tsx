@@ -1,6 +1,9 @@
 import React from 'react'
+// @ts-ignore
 import image1 from "../../../assets/Images/Know_your_progress.svg";
+// @ts-ignore
 import image2 from "../../../assets/Images/Compare_with_others.svg";
+// @ts-ignore
 import image3 from "../../../assets/Images/Plan_your_lessons.svg";
 import HighlightText from './HighlightText';
 import CTAButton from './CTAButton';
@@ -19,14 +22,14 @@ const LearningLanguageSection = () => {
      </div>
 
      <div className='flex flex-row'>
-        <img
+        <img alt='imageva'
          src={image1}
          className="object-contain  lg:-mr-36 "
          />
-        <img src={image2}
+        <img alt='imageva' src={image2}
         className="object-contain  lg:-mr-36 "
         />
-        <img src={image3}
+        <img alt='imageva' src={image3}
         className="object-contain  lg:-mr-36 "
         />
      </div>

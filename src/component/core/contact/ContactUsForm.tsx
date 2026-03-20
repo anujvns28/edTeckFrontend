@@ -1,35 +1,48 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import CountryCode from "../../../data/countrycode.json"
-import { useForm } from "react-hook-form"
 
 
 const ContactUsForm = () => {
-  const [loading, setLoading] = useState(false)
-  const {
-    register,
-    handleSubmit,
-    formState:{ errors,isSubmitSuccessful },
-    reset
-  } = useForm();
-  
-  
-  const formSubmit = (data) => {
-      console.log(data,"priigin e")
+  const [loading, setLoading] = useState(false);
+  const [formData,setFormData] = useState({
+    firstname:"",
+    lastname:"",
+    email:"",
+    phonenumber:"",
+    message:"",
+    countrycode:"+91"
+  })
+  const [errors,setError] = useState({
+    firstname:"",
+    lastname:"",
+    email:"",
+    phonenumber:"",
+    message:"",
+  })
+
+  const handleSubmint = (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    const newErrors = {
+      firstname: formData.firstname ? "" : "Please Enter First Name",
+      lastname: formData.lastname ? "" : "Please Enter Last Name",
+      email: formData.email ? "" : "Please Enter Email",
+      phonenumber: formData.phonenumber ? "" : "Please Enter Phone Number",
+      message: formData.message ? "" : "Please Enter Message",
+    };
+
+    setError(newErrors);
+
+    const hasError = Object.values(newErrors).some((err) => err !== "");
+    if (hasError) return;
+    console.log(formData)
   }
 
-  useEffect(() => {
-    reset({
-      email:"",
-      firstname:"",
-      lastname:"",
-      phonenumber:"",
-      message:""
-    })
-  },[isSubmitSuccessful]);
+ 
 
   
   return (
-    <form onSubmit={handleSubmit(formSubmit)}
+    <form onSubmit={handleSubmint}
       className="flex flex-col gap-7"
     >
       <div className="flex flex-col gap-5 lg:flex-row">
@@ -43,13 +56,18 @@ const ContactUsForm = () => {
             id="firstname"
             placeholder="Enter first name"
             className="form-style"
-            {...register("firstname",{required:true})}
+            onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
+              setFormData((prev) => ({...prev,firstname:e.target.value}))
+              setError((prev) => ({...prev,firstname:""}))
+            }}
           />
+
           { errors.firstname &&
-           <span className="-mt-1 text-[12px] text-yellow-100">
-           Please enter your name.
-         </span>}
-         
+            <span className="-mt-1 text-[12px] text-yellow-100">
+              {errors.firstname}
+            </span>
+          }
+          
         </div>
         <div className="flex flex-col gap-2 lg:w-[48%]">
           <label htmlFor="lastname" className="lable-style">
@@ -59,16 +77,21 @@ const ContactUsForm = () => {
             type="text"
             name="lastname"
             id="lastname"
+
             placeholder="Enter last name"
             className="form-style"
-            {...register("lastname",{required:true})}
+            onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
+              setFormData((prev) => ({...prev,lastname:e.target.value}))
+              setError((prev) => ({...prev,lastname:""}))
+            }}
           />
-          {
-            errors.lastname &&
+
+          {errors.lastname &&
             <span className="-mt-1 text-[12px] text-yellow-100">
-              Please enter your last name.
+              {errors.lastname}
             </span>
           }
+          
         </div>
       </div>
 
@@ -82,14 +105,18 @@ const ContactUsForm = () => {
           id="email"
           placeholder="Enter email address"
           className="form-style"
-          {...register("email",{required:true})}
+          onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
+            setFormData((prev) => ({...prev,email:e.target.value}))
+            setError((prev) => ({...prev,email:""}))
+          }}
         />
-        {
-          errors.email && 
+
+        {errors.email &&
           <span className="-mt-1 text-[12px] text-yellow-100">
-              Please enter your email.
+            {errors.email}
           </span>
         }
+        
       </div>
 
       <div className="flex flex-col gap-2">
@@ -100,12 +127,10 @@ const ContactUsForm = () => {
         <div className="flex gap-5">
           <div className="flex w-[81px] flex-col gap-2">
             <select
-              type="text"
-              name="firstname"
-              id="firstname"
-              placeholder="Enter first name"
+              name="countrycode"
+              id="countrycode"
               className="form-style"
-              {...register("countrycode", { required: true })}
+              onChange={(e:React.ChangeEvent<HTMLSelectElement>)=>setFormData((prev) => ({...prev,countrycode:e.target.value}))}
             >
               {CountryCode.map((ele, i) => {
                 return (
@@ -123,22 +148,19 @@ const ContactUsForm = () => {
               id="phonenumber"
               placeholder="12345 67890"
               className="form-style"
-              {...register("phonenumber",{
-                required:{
-                  value:true,
-                  message:"Pleace Enter your Phone number"
-                },
-                maxLength:{value:12,message:"Invalled Phone number"},
-                minLength:{value:10,message:"Invalled Phone number"}
-                })}
+  
+              onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
+                setFormData((prev) => ({...prev,phonenumber:e.target.value}))
+                setError((prev) => ({...prev,phonenumber:''}))
+              }}
             />
-            {
-              errors.phonenumber && 
-               <span className="-mt-1 text-[12px] text-yellow-100">
-                {errors.phonenumber.message}
-            </span>
 
-            }
+            {errors.phonenumber &&
+            <span className="-mt-1 text-[12px] text-yellow-100">
+              {errors.phonenumber}
+            </span>
+          }
+            
           </div>
         </div>
       </div>
@@ -150,18 +172,22 @@ const ContactUsForm = () => {
         <textarea
           name="message"
           id="message"
-          cols="30"
-          rows="7"
+          cols={30}
+          rows={7}
           placeholder="Enter your message here"
           className="form-style"
-          {...register("message",{required:true})}
+          onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>{
+            setFormData((prev) => ({...prev,message:e.target.value}))
+            setError((prev) => ({...prev,message:""}))
+          }}
         />
-        {
-          errors.message && 
-          <span className="-mt-1 text-[12px] text-yellow-100">
-              Please enter message.
+
+        {errors.message &&
+            <span className="-mt-1 text-[12px] text-yellow-100">
+              {errors.message}
             </span>
-        }
+          }
+        
       </div>
 
       <button

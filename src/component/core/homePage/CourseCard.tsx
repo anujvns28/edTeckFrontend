@@ -1,10 +1,14 @@
 import React from "react";
-
-// Importing React Icons
 import { HiUsers } from "react-icons/hi";
 import { ImTree } from "react-icons/im";
 
-const CourseCard = ({cardData, currentCard,setCurrentCard,setCurrentTabCourse}) => {
+type CourseCardType = {
+  cardData:any,
+  currentCard:any,
+  setCurrentCard:React.Dispatch<React.SetStateAction<any>>
+}
+
+const CourseCard = ({cardData, currentCard,setCurrentCard}:CourseCardType) => {
   
   return (
     <div

@@ -1,26 +1,38 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {AiOutlineCaretDown} from "react-icons/ai"
 import {VscSignOut} from "react-icons/vsc"
 import {VscDashboard} from "react-icons/vsc"  
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../../service/operation/Auth'
+import { RootState } from '../../..'
 
 const ProfileDropdown = () => {
-    const {user} = useSelector((state) => state.profile);
+    const {user} = useSelector((state:RootState) => state.profile);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const openRef = useRef();
+    const openRef = useRef<HTMLDivElement | null>(null);
 
-    const [open,setOpen] = useState(false);
+    const [open,setOpen] = useState<boolean>(false);
 
-    window.addEventListener("click",(e) => {
+    
+    useEffect(() =>{
+      const handleClick = (e:MouseEvent) => {
         if(openRef.current !== e.target ){
-            setOpen(false)
+          setOpen(false)
         }else{
-            return
+          return
         }
-    })
+      }
+
+      window.addEventListener("click",handleClick);
+
+      return () => {
+        window.removeEventListener("click",handleClick);
+      }
+    },[])
+
+    
 
   return (
     <button className='relative' onClick={() => setOpen(true)}>

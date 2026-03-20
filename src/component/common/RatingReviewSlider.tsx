@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { fetchAllRating } from '../../service/operation/Course';
 import ReactStars from "react-rating-stars-component";
 
@@ -7,21 +7,24 @@ import "swiper/css"
 import "swiper/css/free-mode"
 import "swiper/css/pagination"
 import "../../App.css"
-import { RatingAndReview } from '../../types/ratingandreview';
+import type { RatingAndReview } from '../../types/ratingandreview';
 
 
 const RatingReviewSlider = () => {
-    const [ratings, setRatings] = useState<SetStateAction<RatingAndReview>>();
+    const [ratings, setRatings] = useState<RatingAndReview[]>([]);
+
     const getAllRating = async () => {
         const result = await fetchAllRating();
-        if (result) {
+        if (result?.data) {
             setRatings(result.data);
         }
     }
 
+
     useEffect(() => {
         getAllRating();
     }, [])
+
 
 
     return (
@@ -38,7 +41,7 @@ const RatingReviewSlider = () => {
                     }}
                     className="w-full "
                 >
-                    {ratings.map((review, i) => {
+                    {ratings.map((review:RatingAndReview, i:number) => {
                         return (
                             <SwiperSlide key={i}>
                                 <div className="flex flex-col gap-3 bg-richblack-800 p-3 text-[14px] text-richblack-25">
@@ -51,12 +54,12 @@ const RatingReviewSlider = () => {
                                         <div className="flex flex-col">
                                             <h1 className="font-semibold text-richblack-5">{`${review?.user?.firstName} ${review?.user?.lastName}`}</h1>
                                             <h2 className="text-[12px] font-medium text-richblack-500">
-                                                {review?.course?.courseName}
+                                                {review.course.courseName}
                                             </h2>
                                         </div>
                                     </div>
                                     <p className="font-medium text-richblack-25">
-                                        {`${review?.review}`}
+                                        {`${review.review}`}
                                     </p>
                                     <div className="flex items-center gap-2 ">
                                         <h3 className="font-semibold text-yellow-100">

@@ -2,9 +2,18 @@ import React from 'react'
 import HighlightText from '../homePage/HighlightText';
 import CTAButton from '../homePage/CTAButton';
 
+type LearningGridArrayType = {
+  order:number,
+  heading:string,
+  highliteText?:string,
+  description:string,
+  BtnText?:string,
+  BtnLink?:string
+}
+
 const LearningGrid = () => {
     
-    const LearningGridArray = [
+    const LearningGridArray :LearningGridArrayType[] = [
         {
           order: -1,
           heading: "World-Class Learning for",
@@ -64,16 +73,18 @@ const LearningGrid = () => {
             <div className="xl:w-[90%] flex flex-col gap-3 pb-10 xl:pb-0">
               <div className="text-4xl font-semibold ">
                 {card.heading}
-                <HighlightText text={card.highliteText} />
+                {card.highliteText && <HighlightText text={card.highliteText} />}
               </div>
               <p className="text-richblack-300 font-medium">
                 {card.description}
               </p>
 
               <div className="w-fit mt-2">
+                {card.BtnLink && 
                 <CTAButton active={true} location={card.BtnLink}>
                   {card.BtnText}
                 </CTAButton>
+                }
               </div>
             </div>
           ) : (

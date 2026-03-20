@@ -7,26 +7,28 @@ import { BsChevronDown } from "react-icons/bs"
 import ProfileDropdown from '../core/auth/ProfileDropdown'
 import { fetchAllCategories } from '../../service/operation/Course'
 import {AiOutlineShoppingCart} from "react-icons/ai"
+import { rootState } from '../../reducer'
+import { Category } from '../../types/category'
 
 const Navbar = () => {
 
   const location = useLocation();
-  const { token } = useSelector((state) => state.auth);
-  const {user} = useSelector((state)=> state.profile);
-  const {cart} = useSelector((state) => state.cart)
+  const { token } = useSelector((state:rootState) => state.auth);
+  const {user} = useSelector((state:rootState)=> state.profile);
+  const {cart} = useSelector((state:rootState) => state.cart)
     
-  const [subLinks,setSublinks] = useState();
+  const [subLinks,setSublinks] = useState<Category[]>([]);
 
-  const checkLocation = (route) => {
-    const result = matchPath({ path: route }, location.pathname);
-    return result
+  const checkLocation = (route:string):boolean => {
+    return  matchPath({ path: route }, location.pathname) !== null;
+    
   }
 
   // fetching categories
   const handleCategories = async () => {
     const result = await fetchAllCategories();
 
-    if (result) {
+    if (result?.data) {
      setSublinks(result.data)
     }
   }
@@ -91,10 +93,10 @@ const Navbar = () => {
                     </div>
                   </>
                 ) : (
-                  <Link to={link?.path}>
+                  <Link to={link?.path as string}>
                     <p
                       className={`${
-                        checkLocation(link?.path)
+                        checkLocation(link?.path as string)
                           ? "text-yellow-25"
                           : "text-richblack-25"
                       }`}

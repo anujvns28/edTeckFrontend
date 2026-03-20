@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 
-const CTAButton = ({children,active,location}) => {
+type CtaButtonType = {
+  children:ReactNode,
+  active:boolean,
+  location:string
+}
+
+const CTAButton = ({children,active,location}:CtaButtonType) => {
   return (
    <Link to={location}>
     <div className={`px-5 py-3 text-center font-semibold rounded-md hover:scale-95 transition-all duration-200

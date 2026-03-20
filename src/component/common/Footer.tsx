@@ -4,12 +4,10 @@ import { Link } from "react-router-dom";
 
 // Images
 import Logo from "../../assets/Logo/Logo-Full-Light.png";
-
-// Icons
 import { FaFacebook, FaGoogle, FaTwitter, FaYoutube } from "react-icons/fa";
 
-const BottomFooter = ["Privacy Policy", "Cookie Policy", "Terms"];
-const Resources = [
+const BottomFooter : string[] = ["Privacy Policy", "Cookie Policy", "Terms"];
+const Resources : string[] = [
   "Articles",
   "Blog",
   "Chart Sheet",
@@ -19,8 +17,8 @@ const Resources = [
   "Videos",
   "Workspaces",
 ];
-const Plans = ["Paid memberships", "For students", "Business solutions"];
-const Community = ["Forums", "Chapters", "Events"];
+const Plans :string[] = ["Paid memberships", "For students", "Business solutions"];
+const Community :string[] = ["Forums", "Chapters", "Events"];
 
 const Footer = () => {
   return (

@@ -1,5 +1,15 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { TypeAnimation } from 'react-type-animation'
+
+type CodeBlockType = {
+  heading:string,
+  subHeading:string,
+  position:string,
+  ctaButton1:ReactNode,
+  ctaButton2:ReactNode,
+  codeContant:string,
+  codeColor:string
+}
 
 const CodeBlock = ({
     heading,
@@ -9,7 +19,7 @@ const CodeBlock = ({
     ctaButton2,
     codeContant,
     codeColor,
- }) => {
+ }:CodeBlockType) => {
   return (
    <div className={`w-full flex ${position} my-20 justify-between `}>
      <div className='w-[50%] flex flex-col gap-4'>

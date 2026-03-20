@@ -3,15 +3,23 @@ import HighlightText from './HighlightText'
 import {HomePageExplore}  from '../../../data/homepage-explore'
 import CourseCard from './CourseCard';
 
+type CourseType = {
+    heading:string,
+    description:string,
+    level:string,
+    lessionNumber:number
+}
+
 const ExploreMore = () => {
     const [currentTab,setCurrentTab] = useState('Free');
-    const [currentTabCourse,setCurrentTabCourse] = useState(HomePageExplore[0].courses);
+    const [currentTabCourse,setCurrentTabCourse] = useState<CourseType[]>(HomePageExplore[0]!.courses); 
+    // !. matalb mujhe confirm hai ki undefind nahi hoga
     const [currentCard,setCurrentCard] = useState(currentTabCourse[0])
 
-    const handleCurrentTAb = (tab,courses) => {
+    const handleCurrentTAb = (tab:string,courses:CourseType[]) => {
       setCurrentTab(tab);
       setCurrentTabCourse(courses)
-     
+      setCurrentCard(courses[0]);
     }
     console.log(currentTabCourse)
     return (

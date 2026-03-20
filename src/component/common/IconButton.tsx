@@ -3,9 +3,9 @@ import React, { ReactNode } from 'react'
 type IconButtonProps = {
   text:string,
   active:boolean,
-  children:ReactNode,
+  children?:ReactNode,
   type?: "button" | "submit" | "reset",
-  customClasses:string
+  customClasses?:string
   handler?: () => void;
 }
 
