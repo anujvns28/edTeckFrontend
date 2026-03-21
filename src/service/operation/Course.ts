@@ -468,7 +468,7 @@ export const fetchCourseDetails = async (
 
 // fetching all categories api
 export const fetchSubSection = async (
-  data: string,
+  data: { subSection: string },
   token: string,
 ): Promise<any | null> => {
   try {
@@ -494,7 +494,7 @@ export const fetchSubSection = async (
 
 // create a rating for course
 export const createRating = async (
-  data: FormData,
+  data: any,
   token: string,
 ): Promise<boolean> => {
   const toastId = toast.loading("Loading...");

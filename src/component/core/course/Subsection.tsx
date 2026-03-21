@@ -1,8 +1,12 @@
 import React from 'react'
 import { HiOutlineVideoCamera } from "react-icons/hi"
+import type { Subsection } from '../../../types/sections'
 
+type SubSecType = {
+  subSec:Subsection
+}
 
-const Subsection = ({subSec}) => {
+const SubsectionCom = ({subSec}:SubSecType) => {
   return (
     <div>
     <div className="flex justify-between py-2 ">
@@ -10,11 +14,11 @@ const Subsection = ({subSec}) => {
         <span>
           <HiOutlineVideoCamera />
         </span>
-        <p>{subSec?.title}</p>
+        <p>{subSec.title}</p>
       </div>
     </div>
   </div>
   )
 }
 
-export default Subsection
+export default SubsectionCom

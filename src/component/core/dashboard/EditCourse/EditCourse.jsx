@@ -14,9 +14,10 @@ const EditCourse = () => {
 
   const handleCourse = async() => {
     const result = await getFullDetailsOfCourse(courseId, token)
-      if (result.courseDetails) {
-        dispatch(setEditCourse(true))
-        dispatch(setCourse(result?.courseDetails))
+      if (result.data) {
+        dispatch(setEditCourse(true));
+        dispatch(setCourse(result.data));
+        console.log(result.data);
       }
   }
 

@@ -1,6 +1,11 @@
 import React from 'react'
 
-const Tab = ({tab,setTab}) => {
+type TabType = {
+  tab:string,
+  setTab:React.Dispatch<React.SetStateAction<string>>
+}
+
+const Tab = ({tab,setTab}:TabType) => {
   
 
   return (

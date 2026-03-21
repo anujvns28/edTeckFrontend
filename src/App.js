@@ -31,20 +31,21 @@ function App() {
     <div className="flex min-h-screen w-screen flex-col bg-richblack-900 font-inter">
       <Navbar />
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/contact' element={<Contact />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
 
         <Route
-          path='/login'
+          path="/login"
           element={
             <OpenRoute>
               <Login />
             </OpenRoute>
-          } />
+          }
+        />
 
         <Route
-          path='/signup'
+          path="/signup"
           element={
             <OpenRoute>
               <Signup />
@@ -53,54 +54,64 @@ function App() {
         />
 
         <Route
-          path='/verify-email'
+          path="/verify-email"
           element={
             <OpenRoute>
               <VeryfiEmail />
             </OpenRoute>
-          } />
+          }
+        />
 
         <Route
-          path='/forgot-password'
+          path="/forgot-password"
           element={
             <OpenRoute>
               <ForgotPassword />
             </OpenRoute>
-          } />
+          }
+        />
 
         <Route
-          path='update-password/:token'
+          path="update-password/:token"
           element={
             <OpenRoute>
               <UpdatePassword />
             </OpenRoute>
-          } />
+          }
+        />
 
-        <Route 
-        element={
-          <PrivateRoute>
-            <Dashboard />
-          </PrivateRoute>
-        } >
-          <Route path='/dashboard/My-profile' element={<MyProfile />} />
-          <Route path='/dashboard/enrolled-courses' element={<EnrolledCourses />} />
-          <Route path='/dashboard/cart' element={<Cart />} />
-          <Route path='/dashboard/settings' element={<Setting />} />
+        <Route
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        >
+          <Route path="/dashboard/My-profile" element={<MyProfile />} />
+          <Route
+            path="/dashboard/enrolled-courses"
+            element={<EnrolledCourses />}
+          />
+          <Route path="/dashboard/cart" element={<Cart />} />
+          <Route path="/dashboard/settings" element={<Setting />} />
 
-
-          <Route path='dashboard/add-course' element={<AddCourse/>} />
-          <Route path='dashboard/my-courses' element={<MyCourses/>} />
-          <Route path='dashboard/edit-course/:courseId' element={<EditCourse/>} />
-          <Route path='dashboard/instructor' element={<Instructor/>} />
+          <Route path="dashboard/add-course" element={<AddCourse />} />
+          <Route path="dashboard/my-courses" element={<MyCourses />} />
+          <Route
+            path="dashboard/edit-course/:courseId"
+            element={<EditCourse />}
+          />
+          <Route path="dashboard/instructor" element={<Instructor />} />
         </Route>
 
-        <Route path='/catalog/:catlogName' element={<Catlog/>} />
-        <Route path='/courses/:couseId' element={<CouseDetails/>} />
+        <Route path="/catalog/:catlogName" element={<Catlog />} />
+        <Route path="/courses/:courseId" element={<CouseDetails />} />
 
-
-        <Route element={<ViewCourse/>} >
-          <Route  path="view-course/:courseId/:lectureId"
-          element={<VideoDetail/>}/>
+        <Route element={<ViewCourse />}>
+          <Route
+            path="view-course/:courseId/:lectureId"
+            element={<VideoDetail />}
+          />
         </Route>
       </Routes>
     </div>

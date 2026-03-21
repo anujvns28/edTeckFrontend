@@ -13,51 +13,48 @@ import RatingReviewSlider from '../component/common/RatingReviewSlider';
 import ReactStars from "react-rating-stars-component";
 
 const CouseDetails = () => {
-  const { token } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.profile)
-  const [couseData, setCouseData] = useState();
+  const [courseData, setCourseData] = useState();
   const [isActive, setIsActive] = useState([]);
-  const { couseId } = useParams()
+  const { courseId } = useParams();
 
   const [modalData, setModalData] = useState();
   const [avgReviewCount, setAvgReviewCount] = useState();
   const [loading, setLoading] = useState(false);
 
   const fetchCouseData = async () => {
-    setLoading(true)
-    const result = await fetchCourseDetails(couseId);
+    setLoading(true);
+    const result = await fetchCourseDetails(courseId);
     if (result) {
-      setCouseData(result.data);
+      setCourseData(result.data);
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   const handleActive = (section_id) => {
-    let arr = [...isActive]
+    let arr = [...isActive];
     const index = arr.findIndex((item) => item == section_id);
 
     if (index >= 0) {
-      arr.splice(index, 1)
+      arr.splice(index, 1);
       setIsActive(arr);
     } else {
       arr.push(section_id);
       setIsActive(arr);
     }
-  }
-
+  };
 
   const formatDate = (dateString) => {
     const dateObject = new Date(dateString);
-    const options = { year: 'numeric', month: 'short', day: '2-digit' };
-    return dateObject.toLocaleDateString('en-US', options);
+    const options = { year: "numeric", month: "short", day: "2-digit" };
+    return dateObject.toLocaleDateString("en-US", options);
   };
 
   const getAverageRatting = async () => {
-    const result = await fetchAverageRatting(couseId)
+    const result = await fetchAverageRatting(courseId);
     if (result) {
       setAvgReviewCount(result.averageRating);
     }
-  }
+  };
 
 
   useEffect(() => {
@@ -65,13 +62,12 @@ const CouseDetails = () => {
     getAverageRatting();
   }, [])
 
-
   return (
     <>
       <div className={`relative w-full bg-richblack-800 `}>
         {/* Hero Section */}
         {
-          !couseData ? <div className='flex items-center text-white text-xl justify-center w-screen h-screen'>Loading...</div>
+          !courseData ? <div className='flex items-center text-white text-xl justify-center w-screen h-screen'>Loading...</div>
             : <div className="mx-auto box-content px-4 lg:w-[1260px] 2xl:relative ">
               <div className="mx-auto grid min-h-[450px] max-w-maxContentTab justify-items-center py-8 lg:mx-0 lg:justify-items-start lg:py-0 xl:max-w-[810px]">
 
@@ -80,10 +76,10 @@ const CouseDetails = () => {
                 >
                   <div>
                     <p className="text-4xl font-bold text-richblack-5 sm:text-[42px]">
-                      {couseData.courseName}
+                      {courseData.courseName}
                     </p>
                   </div>
-                  <p className={`text-richblack-200`}>{couseData.courseDescription}</p>
+                  <p className={`text-richblack-200`}>{courseData.courseDescription}</p>
                   <div className="text-md flex flex-wrap items-center gap-2">
                     <span className="text-yellow-25">{avgReviewCount}</span>
                     <ReactStars
@@ -95,18 +91,18 @@ const CouseDetails = () => {
                       fullIcon={<i className="fa fa-star"></i>}
                       activeColor="#ffd700"
                     />
-                    <span>{`(${couseData?.ratingAndReviews.length} reviews)`}</span>
-            <span>{`${couseData?.studentsEnroled.length} students enrolled`}</span>
+                    <span>{`(${courseData?.ratingAndReviews.length} reviews)`}</span>
+            <span>{`${courseData?.studentsEnroled.length} students enrolled`}</span>
                   </div>
                   <div>
                     <p className="">
-                      Created By {`${couseData.instructor.firstName} ${couseData.instructor.lastName}`}
+                      Created By {`${courseData.instructor.firstName} ${courseData.instructor.lastName}`}
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-5 text-lg">
                     <p className="flex items-center gap-2">
                       {" "}
-                      <BiInfoCircle /> Created at {" "} {formatDate(couseData.createdAt)}
+                      <BiInfoCircle /> Created at {" "} {formatDate(courseData.createdAt)}
                     </p>
                     <p className="flex items-center gap-2">
                       {" "}
@@ -119,7 +115,7 @@ const CouseDetails = () => {
               {/* Courses Card */}
               <div className="right-[1rem] top-[60px] mx-auto hidden min-h-[600px] w-1/3 max-w-[410px] translate-y-24 md:translate-y-0 lg:absolute  lg:block">
                 <CourseDetailsCard
-                  course={couseData}
+                  course={courseData}
                   setModalData={setModalData}
                 />
               </div>
@@ -129,14 +125,14 @@ const CouseDetails = () => {
 
 
       {
-        couseData &&
+        courseData &&
         <div className="mx-auto box-content px-4 text-start text-richblack-5 lg:w-[1260px]">
           <div className="mx-auto max-w-maxContentTab lg:mx-0 xl:max-w-[810px]">
             {/* What will you learn section */}
             <div className="my-8 border border-richblack-600 p-8">
               <p className="text-3xl font-semibold">What you'll learn</p>
               <div className="mt-5">
-                <ReactMarkdown>{couseData.whatYouWillLearn}</ReactMarkdown>
+                <ReactMarkdown>{courseData.whatYouWillLearn}</ReactMarkdown>
               </div>
             </div>
 
@@ -147,12 +143,12 @@ const CouseDetails = () => {
                 <div className="flex flex-wrap justify-between gap-2">
                   <div className="flex gap-2">
                     <span>
-                      {couseData.courseContent.length} {`section(s)`}
+                      {courseData.courseContent.length} {`section(s)`}
                     </span>
                     <span>
-                      {couseData.totalNoOfLectures} 10 {`lecture(s)`}
+                      {courseData.totalNoOfLectures} 10 {`lecture(s)`}
                     </span>
-                    <span>{couseData.totalDuration} 10s total length</span>
+                    <span>{courseData.totalDuration} 10s total length</span>
                   </div>
                   <div>
                     <button
@@ -167,9 +163,9 @@ const CouseDetails = () => {
 
               {/* Course Details Accordion */}
               <div className="py-4">
-                {couseData.courseContent?.map((course, index) => (
+                {courseData.courseContent?.map((course, index) => (
                   <CourseAccordionBar
-                    course={course}
+                    section={course}
                     key={index}
                     isActive={isActive}
                     handleActive={handleActive}
@@ -183,15 +179,15 @@ const CouseDetails = () => {
                 <div className="flex items-center gap-4 py-4">
                   <img
                     src={
-                      couseData.instructor.image
+                      courseData.instructor.image
                     }
                     alt="Author"
                     className="h-14 w-14 rounded-full object-cover"
                   />
-                  <p className="text-lg">{`${couseData.instructor.firstName} ${couseData.instructor.lastName}`}</p>
+                  <p className="text-lg">{`${courseData.instructor.firstName} ${courseData.instructor.lastName}`}</p>
                 </div>
                 <p className="text-richblack-50">
-                  {couseData.instructor?.additionalDetails?.about}
+                  {courseData.instructor?.additionalDetails?.about}
                 </p>
               </div>
 

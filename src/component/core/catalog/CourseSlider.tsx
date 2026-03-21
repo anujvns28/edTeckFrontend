@@ -1,20 +1,21 @@
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react';
-
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import CourseCard from './CourseCard';
+import { Course } from '../../../types/course';
 
-const CourseSlider = ({courses}) => {
-    console.log(courses,"this is in slider")
+type CourseSliderType = {
+  courses:Course[]
+}
+
+const CourseSlider = ({courses}:CourseSliderType) => {
+    
   return (
     <div>
        <Swiper
-      // install Swiper modules
       modules={[Navigation, Pagination, Scrollbar, A11y]}
       spaceBetween={50}
       slidesPerView={3}

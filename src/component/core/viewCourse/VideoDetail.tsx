@@ -3,57 +3,66 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchSubSection, getFullDetailsOfCourse } from '../../../service/operation/Course';
 import IconButton from '../../common/IconButton';
+import { rootState } from '../../../reducer';
+import { Course } from '../../../types/course';
+import { Subsection } from '../../../types/sections';
 
 const VideoDetail = () => {
-  const { courseId ,lectureId} = useParams();
-  const { token } = useSelector((state) => state.auth);
-  const [lectureData,setLectureData] = useState();
-  const [courseData,setCourseData] = useState();
-  const [allLecture,setAllLecture] = useState([]);
-  const [isRunningLecture,setIsRunningLecture] = useState();
+  const { courseId,lectureId} = useParams();
+  const { token } = useSelector((state:rootState) => state.auth);
+  const [lectureData,setLectureData] = useState<Subsection | null>(null);
+  const [courseData,setCourseData] = useState<Course | null>(null);
+  const [allLecture,setAllLecture] = useState<string[]>([]);
+  const [isRunningLecture,setIsRunningLecture] = useState<boolean>(false);
 
   const navigate = useNavigate()
-  const videoRef = useRef();
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   
   const fetchLectureData = async () => {
-    const result = await fetchSubSection({subSectionId:lectureId}, token);
-    if (result) {
-      setLectureData(result.data);
+    if(lectureId && token){
+      const result = await fetchSubSection({subSectionId:lectureId}, token);
+      if (result) {
+        setLectureData(result.data);
+    }
     }
   }
 
   const fetchCourseData = async() => {
+    if(courseId && token){
     const result = await getFullDetailsOfCourse(courseId, token);
-    let lectureArr = []
+    let lectureArr:string[] = []
     if (result) {
        setCourseData(result.data);
-       result.data.courseContent.map((section) => {
-         if (section.subSection.length > 0) {
-           section.subSection.map((subSection) => {
+       result.data.courseContent.forEach((section) => {
+          if (section.subSection.length > 0) {
+           section.subSection.forEach((subSection) => {
              lectureArr.push(subSection._id);
            });
          }
        });
        setAllLecture(lectureArr)
     }
+    }
   }
 
   const lectureIndex = () => {
     let arr = [...allLecture] 
-    return arr.findIndex((item) => item== lectureId)
+    return arr.findIndex((item) => item === lectureId)
   }
 
   const rewatch = () => {
-    videoRef.current.play();
-    setIsRunningLecture(false)
+    if(videoRef.current){
+      videoRef.current.play();
+      setIsRunningLecture(false)
+    }
   }
 
-  const nextLecture = (i) => {
+  const nextLecture = (i:number) => {
     navigate(`/view-course/${courseId}/${allLecture[i+1]}`)
     setIsRunningLecture(false)
   }
 
-  const prevLecture = (i) => {
+  const prevLecture = (i:number) => {
     navigate(`/view-course/${courseId}/${allLecture[i-1]}`)
     setIsRunningLecture(false)
   }
@@ -96,7 +105,7 @@ const VideoDetail = () => {
         <IconButton
           text="Rewatch"
           active={true}
-          handlear={() => rewatch()}
+          handler={() => rewatch()}
           customClasses="text-xl max-w-max px-4 mx-auto mt-2"
         />
         <div className="mt-10 flex min-w-[250px] justify-center gap-x-4 text-xl">

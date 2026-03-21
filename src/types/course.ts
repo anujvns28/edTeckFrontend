@@ -13,7 +13,7 @@ export type Course = {
   thumbnail: string;
   tag: string[];
   category?: string;
-  studentsEnroled: User[];
+  studentsEnroled: string[];
   instructions?: string[];
   status: "Draft" | "Published";
   createdAt: string;

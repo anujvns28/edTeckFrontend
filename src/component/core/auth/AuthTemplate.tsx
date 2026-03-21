@@ -1,11 +1,22 @@
 import React from 'react'
-import LoginFrom from './LoginFrom'
+import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
 import frame from "../../../assets/Images/frame.png"
+// @ts-ignore
 import loginImg from "../../../assets/Images/login.webp"
+// @ts-ignore
 import signupImg from "../../../assets/Images/signup.webp"
 
-const AuthTemplate = ({ templateData, login }) => {
+type AuthTemplateType = {
+    templateData:{
+        heading:string,
+        desc:string,
+        subDesc:string
+    },
+    login:boolean
+}
+
+const AuthTemplate = ({ templateData, login }:AuthTemplateType) => {
     return (
         <div className='flex w-11/12 min-h-[calc(100vh-3.5rem)] max-w-maxContent mx-auto items-center  justify-betmx-auto  flex-col-reverse justify-between gap-y-12 py-12 md:flex-row md:gap-y-0 md:gap-x-12ween'>
             <div className='w-full h-full mx-auto max-w-[450px]  '>
@@ -19,7 +30,7 @@ const AuthTemplate = ({ templateData, login }) => {
                     </span>
                 </p>
                 {
-                    login ? <LoginFrom /> : <SignupForm />
+                    login ? <LoginForm /> : <SignupForm />
                 }
             </div>
 

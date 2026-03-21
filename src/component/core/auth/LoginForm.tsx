@@ -3,22 +3,29 @@ import { login } from '../../../service/operation/Auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
+type FormDataType = {
+  email: string;
+  password: string;
+}
+
 const LoginFrom = () => {
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState<FormDataType>({
+    email:"",
+    password:""
+  });
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
 
-  const handleChange = (e) => {
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name as keyof FormDataType]: e.target.value
     }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Calling....")
     login(formData, navigate, dispatch);
   }
 

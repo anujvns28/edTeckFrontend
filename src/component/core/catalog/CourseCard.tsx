@@ -2,25 +2,29 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchAverageRatting } from '../../../service/operation/Course';
 import ReactStars from "react-rating-stars-component";
+import { Course } from '../../../types/course';
 
-const CourseCard = ({ course, Height }) => {
-  const [avgReviewCount, setAvgReviewCount] = useState();
+type CourseCardType = {
+  course:Course,
+  Height:string
+}
+
+const CourseCard = ({ course, Height }:CourseCardType) => {
+  const [avgReviewCount, setAvgReviewCount] = useState(0);
   const [loading,setLoading] = useState(false)
 
-  const getAverageRatting = async () => {
-    setLoading(false)
+  const getAverageRating = async () => {
+    setLoading(true)
     const result = await fetchAverageRatting(course._id)
     if (result) {
-      setAvgReviewCount(result.averageRating);
-      setLoading(true)
+      setAvgReviewCount(Math.floor(result.averageRating*10)/10);
+      setLoading(false)
     }
   }
 
-  console.log(avgReviewCount,"course,,,")
-
   useEffect(() => {
-    getAverageRatting();
-  }, [])
+    getAverageRating();
+  }, [course._id])
   return (
     <div>
       <>
@@ -28,14 +32,14 @@ const CourseCard = ({ course, Height }) => {
           <div className="">
             <div className="rounded-lg">
               <img
-                src={course?.thumbnail}
+                src={course.thumbnail}
                 alt="course thumnail"
                 className={`${Height} w-full rounded-xl object-cover `}
               />
             </div>
             
             <div className="flex flex-col gap-2 px-1 py-3">
-              <p className="text-xl text-richblack-5">{course?.courseName}</p>
+              <p className="text-xl text-richblack-5">{course.courseName}</p>
              
             {
               loading && 
@@ -54,7 +58,7 @@ const CourseCard = ({ course, Height }) => {
             </div>
             }
              
-              <p className="text-xl text-richblack-5">Rs. {course?.price}</p>
+              <p className="text-xl text-richblack-5">Rs. {course.price}</p>
             </div>
           </div>
         </Link>

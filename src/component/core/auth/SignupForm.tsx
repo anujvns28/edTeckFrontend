@@ -6,12 +6,21 @@ import toast from 'react-hot-toast';
 import { setSignupData } from '../../../slices/authSlice';
 import { sendOtp } from '../../../service/operation/Auth';
 
+type SignupFormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  accountType: string;
+};
+
 const SignupForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [tab,setTab] = useState("Student");
-  const [formData,setFormData] = useState({
+  const [formData,setFormData] = useState<SignupFormData>({
     firstName:"",
     lastName:"",
     email:"",
@@ -22,14 +31,14 @@ const SignupForm = () => {
 
   
 
-  const handleChange = (e) => {
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
   setFormData((prev) => ({
     ...prev,
-    [e.target.name] : e.target.value
+    [e.target.name as keyof SignupFormData] : e.target.value
   }))
   }
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async(e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
    
     if(formData.password !== formData.confirmPassword){
@@ -37,17 +46,11 @@ const SignupForm = () => {
       return
     }
 
-    dispatch(setSignupData(formData));
+    dispatch(setSignupData({...formData,accountType:tab}));
     sendOtp(formData.email,navigate);
-    console.log(formData,'this is form data')
   }
 
-  useEffect(() => {
-   setFormData((prev) => ({
-    ...prev,
-    accountType:tab
-   }))
-  },[tab])
+
 
 
   return (
@@ -63,7 +66,7 @@ const SignupForm = () => {
             <input
               required
               name='firstName'
-              type='string'
+              type='text'
               onChange={handleChange}
               placeholder="Enter first name"
               className='w-full rounded-lg bg-richblack-700 p-3 text-[16px] leading-[24px] text-richblack-5 shadow-[0_1px_0_0]
@@ -78,7 +81,7 @@ const SignupForm = () => {
             <input
               required
               name='lastName'
-              type='string'
+              type='text'
               onChange={handleChange}
               placeholder="Enter last name"
               className='w-full rounded-lg bg-richblack-700 p-3 text-[16px] leading-[24px] text-richblack-5 shadow-[0_1px_0_0]
