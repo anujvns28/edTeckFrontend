@@ -7,28 +7,33 @@ import {BsChevronDown} from "react-icons/bs"
 import IconButton from '../../common/IconButton';
 import { MdOutlineOndemandVideo } from "react-icons/md";
 import CourseReviewModal from './CourseReviewModal';
+import { rootState } from '../../../reducer';
+import type { Course } from '../../../types/course';
 
 const VideoSectionSidebar = () => {
   const { courseId ,lectureId} = useParams();
-  const { token } = useSelector((state) => state.auth);
-  const [courseDetail, setCourseDetail] = useState();
-  const [activeSection,setActiveSection] = useState();
-  const [reviewModal,setReviewModal] = useState();
+  const { token } = useSelector((state:rootState) => state.auth);
+  const [courseDetail, setCourseDetail] = useState<Course>();
+  const [activeSection,setActiveSection] = useState<string[]>([]);
+  const [reviewModal,setReviewModal] = useState<boolean>();
 
   const navigate = useNavigate();
 
   const fetchCourseDetail = async () => {
-    const result = await getFullDetailsOfCourse(courseId, token);
+    if(courseId && token){
+      const result = await getFullDetailsOfCourse(courseId, token);
     if (result) {
       setCourseDetail(result.data);
-      setActiveSection([result.data.courseContent[0]._id]);
+      if(result.data.courseContent[0]){
+        setActiveSection([result.data.courseContent[0]._id]);
+      }
+    }
     }
   }
 
-  const handleActiveSection = (sectionId) => {
+  const handleActiveSection = (sectionId:string) => {
     let arr = [...activeSection];
     const index = arr.findIndex((item) => item === sectionId);
-    console.log(index)
     if(index >= 0){
       arr.splice(index,1)
       setActiveSection(arr);
@@ -41,6 +46,7 @@ const VideoSectionSidebar = () => {
   useEffect(() => {
     fetchCourseDetail();
   }, [courseId])
+
 
   
   return (
@@ -65,7 +71,7 @@ const VideoSectionSidebar = () => {
             </div>
             <IconButton
               active={true}
-              handlear={() => setReviewModal(true)}
+              handler={() => setReviewModal(true)}
               text="Add Review"
             />
           </div>
@@ -121,7 +127,7 @@ const VideoSectionSidebar = () => {
         {/* main div */}
         </div>
       }
-      {reviewModal && <CourseReviewModal setReviewModal={setReviewModal} courseId={courseId}/>}
+      {reviewModal && courseId && <CourseReviewModal setReviewModal={setReviewModal} courseId={courseId}/>}
       </div>
     </>
   )

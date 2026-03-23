@@ -1,25 +1,38 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FiUploadCloud } from "react-icons/fi"
 
-const SubSectionLecutureUploader = ({ name, label, register, errors, setValue,view,edit,videoUrl }) => {
+type SubSectionLectureProps = {
+    name:string,
+    label:string,
+    register :(name:string,req:{required:boolean}) => void,
+    errors:any,
+    setValue:any,
+    view:boolean,
+    edit:boolean,
+    videoUrl:string | null
+}
 
-    const [selectedFile, setSelectedFile] = useState();
-    const [preViewFile, setPreViewFile] = useState();
-    const inputRef = useRef();
+const SubSectionLecutureUploader = ({ name, label, register, errors, setValue,view,edit,videoUrl }:SubSectionLectureProps) => {
+    const [preViewFile, setPreViewFile] = useState<string | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
     const handeleClick = () => {
-        inputRef.current.click();
+        if(inputRef.current){
+            inputRef.current.click();
+        }
     }
 
-    const handeleChange = (e) => {
-        const file = e.target.files[0]
-        setPreViewFile(URL.createObjectURL(file))
-        setValue(name,file);
+    const handeleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.files){
+            const file = e.target.files[0] as File
+            setPreViewFile(URL.createObjectURL(file))
+            setValue(name,file);
+        }
     }
 
 
     useEffect(() => {
-        {register(name,{required:true})}
+        register(name,{required:true})
         if(videoUrl){
             setPreViewFile(videoUrl)
             setValue(name,videoUrl)
@@ -45,7 +58,7 @@ const SubSectionLecutureUploader = ({ name, label, register, errors, setValue,vi
                                 id={name}
                                 ref={inputRef}
                                 onChange={handeleChange}
-                                accept='vidio/*'
+                                accept='video/*'
                                 
                             />
 
@@ -77,7 +90,6 @@ const SubSectionLecutureUploader = ({ name, label, register, errors, setValue,vi
                             <button
                             onClick={() => {
                                 setPreViewFile(null);
-                                setSelectedFile(null)
                             }}
                             className="mt-3 text-richblack-400 underline"
                         >

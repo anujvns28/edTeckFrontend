@@ -1,3 +1,4 @@
+import { Category } from "./category";
 import type { Section } from "./sections";
 import type { User } from "./user";
 
@@ -12,7 +13,7 @@ export type Course = {
   price: number;
   thumbnail: string;
   tag: string[];
-  category?: string;
+  category?: Category;
   studentsEnroled: string[];
   instructions?: string[];
   status: "Draft" | "Published";

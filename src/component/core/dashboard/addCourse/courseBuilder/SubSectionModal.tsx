@@ -1,18 +1,25 @@
 import React, { useEffect } from 'react'
 import {RxCross2} from "react-icons/rx"
-import { get, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import SubSectionLecutureUploader from './SubSectionLecutureUploader'
 import IconButton from '../../../../common/IconButton'
-import { createSubSection, editCourseDetails, updateSubSection } from '../../../../../service/operation/Course'
+import { createSubSection,updateSubSection } from '../../../../../service/operation/Course'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCourse } from '../../../../../slices/courseSlice'
 import toast from 'react-hot-toast'
+import { rootState } from '../../../../../reducer'
+import { Course } from '../../../../../types/course'
+import { SubSectionModaldata } from '../../../../../types/modalData'
 
 
-const SubSectionModal = ({subSectionModalData,setSubSectionModal}) => {
 
- 
-   
+type SubSectionModalRef = {
+  subSectionModalData:SubSectionModaldata,
+  setSubSectionModal:React.Dispatch<React.SetStateAction<SubSectionModaldata | null>>
+}
+
+const SubSectionModal = ({subSectionModalData,setSubSectionModal}:SubSectionModalRef) => {
+
     const {
         register,
         handleSubmit,
@@ -21,25 +28,26 @@ const SubSectionModal = ({subSectionModalData,setSubSectionModal}) => {
         getValues
     } = useForm()
     const dispatch = useDispatch()
-    const {course} = useSelector((state) => state.course)
-    const {token} = useSelector((state) => state.auth)
+    const {course} = useSelector((state:rootState) => state.course)
+    const {token} = useSelector((state:rootState) => state.auth)
 
 
     const isFormUpdate = () => {
       const subSectionData = getValues()  
       if(
-        subSectionData.lectureTitle !== subSectionModalData.subsectionData.title ||
+        subSectionModalData.subsectionData && 
+        (subSectionData.lectureTitle !== subSectionModalData.subsectionData.title ||
         subSectionData.lectureDesc !== subSectionModalData.subsectionData.description ||
-        subSectionData.lectureVidio !== subSectionModalData.subsectionData.videoUrl
+        subSectionData.lectureVidio !== subSectionModalData.subsectionData.videoUrl)
         ){
           return true
         }
         return false
     }
 
-    const handleForm = async(data) => {
+    const handleForm = async(data:any) => {
         if(subSectionModalData.edit){
-          if(isFormUpdate()){
+          if(isFormUpdate() && subSectionModalData.subsectionData){
             const formData = new FormData()
             const currentValue = getValues();
 
@@ -55,15 +63,15 @@ const SubSectionModal = ({subSectionModalData,setSubSectionModal}) => {
             }
            formData.append("sectionId",subSectionModalData.sectionId);
            formData.append("subSectionId",subSectionModalData.subsectionData._id);
-           
+           if(!token) return;
            const result = await updateSubSection(formData,token);
 
-           if(result){
-            const updateSection = course.courseContent.map((section) =>
-            section._id === result._id ?  result : section
+           if(result && course?.courseContent){
+              const updateSection = course.courseContent.map((section) =>
+              section._id === result.data._id ?  result : section
             )
             const updateCourse = {...course,courseContent:updateSection}
-            dispatch(setCourse(updateCourse))
+            dispatch(setCourse(updateCourse as Course))
             setSubSectionModal(null)
            }
 
@@ -80,9 +88,10 @@ const SubSectionModal = ({subSectionModalData,setSubSectionModal}) => {
         formData.append("title",data.lectureTitle)
         formData.append("video",data.lectureVidio)
         formData.append("description",data.lectureDesc)
+        if(!token) return
         const result = await createSubSection(formData,token)
 
-        if(result){
+        if(result && course?.courseContent){
             const updateSection = course.courseContent.map((section) =>
               section._id === subSectionModalData.sectionId
                 ? result.data
@@ -99,7 +108,7 @@ const SubSectionModal = ({subSectionModalData,setSubSectionModal}) => {
 
 
     useEffect(() => {
-     if( subSectionModalData.view || subSectionModalData.edit){
+     if( (subSectionModalData.view || subSectionModalData.edit) && subSectionModalData.subsectionData ){
         setValue("lectureTitle",subSectionModalData.subsectionData.title)
         setValue("lectureDesc",subSectionModalData.subsectionData.description)
      }
@@ -123,14 +132,14 @@ const SubSectionModal = ({subSectionModalData,setSubSectionModal}) => {
             className="space-y-8 px-8 py-10"
             >
                <SubSectionLecutureUploader
-               label={"Lecture Vidio"}
-               name={"lectureVidio"}
-               register={register}
-               errors={errors}
-               view={subSectionModalData.view ? true : false}
-               edit={subSectionModalData.edit? true :false}
-               videoUrl= {!subSectionModalData.add ? subSectionModalData.subsectionData.videoUrl : null}
-               setValue={setValue}
+                label={"Lecture Vidio"}
+                name={"lectureVidio"}
+                register={register}
+                errors={errors}
+                view={subSectionModalData.view ? true : false}
+                edit={subSectionModalData.edit? true :false}
+                videoUrl= {subSectionModalData.subsectionData && !subSectionModalData.add ? subSectionModalData.subsectionData.videoUrl : null}
+                setValue={setValue}
                />
 
                {/* Lecture Title */}

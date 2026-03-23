@@ -1,14 +1,12 @@
 import { useSelector } from "react-redux"
 import RenderCartCourses from "./RenderCartCourses"
 import RenderTotalAmount from "./RenderTotalAmount"
+import { rootState } from "../../../../reducer"
 
 
 export default function Cart() {
-  const { totalAmount,cart} = useSelector((state) => state.cart)
+  const { totalAmount,cart} = useSelector((state:rootState) => state.cart)
   
-
-  
-
   return (
     <>
       <h1 className="mb-14 text-3xl font-medium text-richblack-5">Cart</h1>

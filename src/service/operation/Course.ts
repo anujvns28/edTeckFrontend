@@ -315,7 +315,7 @@ export const updateSubSection = async (
 
 // delete a subsection
 export const deleteSubSection = async (
-  data: FormData,
+  data: { sectionId: string; subSectionId: string },
   token: string,
 ): Promise<ApiResponse<Section> | null> => {
   const toastId = toast.loading("Loading...");
@@ -468,7 +468,7 @@ export const fetchCourseDetails = async (
 
 // fetching all categories api
 export const fetchSubSection = async (
-  data: { subSection: string },
+  data: { subSectionId: string },
   token: string,
 ): Promise<any | null> => {
   try {

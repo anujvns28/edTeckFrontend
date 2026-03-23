@@ -1,27 +1,29 @@
 import React, { useEffect } from 'react'
+//@ts-ignore
 import RenderStapes from '../addCourse/RenderStapes'
 import {useDispatch,useSelector} from  "react-redux"
 import {useParams} from "react-router-dom"
 import { getFullDetailsOfCourse } from '../../../../service/operation/Course'
 import { setCourse, setEditCourse } from '../../../../slices/courseSlice'
+import { rootState } from '../../../../reducer'
 
 
 const EditCourse = () => {
   const dispatch = useDispatch()
   const { courseId } = useParams()
-  const { course } = useSelector((state) => state.course)
-  const { token } = useSelector((state) => state.auth)
+  const { course } = useSelector((state:rootState) => state.course)
+  const { token } = useSelector((state:rootState) => state.auth)
 
   const handleCourse = async() => {
-    const result = await getFullDetailsOfCourse(courseId, token)
-      if (result.data) {
+    if(courseId && token){
+      const result = await getFullDetailsOfCourse(courseId, token)
+      if (result && result.data) {
         dispatch(setEditCourse(true));
         dispatch(setCourse(result.data));
-        console.log(result.data);
       }
+    }
   }
 
-  console.log(course,"printing couse details")
 
   useEffect(() => {
    handleCourse()

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import IconButton from '../../../../common/IconButton'
 import {IoAddCircleOutline} from "react-icons/io5"
@@ -8,13 +8,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setCourse, setEditCourse, setStep } from '../../../../../slices/courseSlice'
 import { createSection, updateSection } from '../../../../../service/operation/Course'
 import toast from 'react-hot-toast'
+import { rootState } from '../../../../../reducer'
 
 const CourseBuilderForm = () => {
 
-  const {course} = useSelector((state) => state.course);
-  const {token} = useSelector((state) => state.auth)
+  const {course} = useSelector((state:rootState) => state.course);
+  const {token} = useSelector((state:rootState) => state.auth)
   const [editSection,setEditSection] = useState(false);
-  const [editSectionId,setEditSectionId] = useState();
+  const [editSectionId,setEditSectionId] = useState<string | null>(null);
 
     const {
     register,
@@ -24,7 +25,8 @@ const CourseBuilderForm = () => {
     } = useForm()
     const dispatch = useDispatch();
 
-    const onSubmit = async(data) => {
+    const onSubmit = async(data:any) => {
+    if(!course || !token) return;
     if(editSection){
       const result = await updateSection({
         sectionName:data.sectionName,
@@ -35,7 +37,7 @@ const CourseBuilderForm = () => {
       )
 
       if(result){
-        dispatch(setCourse(result))
+        dispatch(setCourse(result.data))
         setEditSection(false)
         setValue("sectionName","")
         setEditSectionId(null)
@@ -62,7 +64,7 @@ const CourseBuilderForm = () => {
      dispatch(setEditCourse(true))
     }
 
-    const editSectionInformation = (sectionName,sectionId) =>{
+    const editSectionInformation = (sectionName:string,sectionId:string) => {
         setEditSection(true)
         setValue("sectionName",sectionName)
         setEditSectionId(sectionId)
@@ -70,6 +72,7 @@ const CourseBuilderForm = () => {
 
 
     const goToNext = () => {
+      if(!course) return ;
       if(course.courseContent.length === 0){
         toast.error("Add atlest one Section")
         return
@@ -127,7 +130,7 @@ const CourseBuilderForm = () => {
           
         </div>
       </form>
-      {course.courseContent.length > 0 && (
+      {course && course.courseContent.length > 0 && (
         <NestedView editSectionInformation={editSectionInformation} />
       )}
       {/* Next Prev Button */}
@@ -139,7 +142,7 @@ const CourseBuilderForm = () => {
           Back
         </button>
 
-        <IconButton text="Next" active={true} handlear={goToNext}>
+        <IconButton text="Next" active={true} handler={goToNext}>
           <MdNavigateNext />
         </IconButton>
       </div>

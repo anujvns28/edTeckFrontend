@@ -1,10 +1,11 @@
 import { RiDeleteBin6Line } from "react-icons/ri"
 import { useDispatch, useSelector } from "react-redux"
 import { removeToCart } from "../../../../slices/cartSlice"
+import { rootState } from "../../../../reducer"
 
 
 export default function RenderCartCourses() {
-  const { cart } = useSelector((state) => state.cart)
+  const { cart } = useSelector((state:rootState) => state.cart)
   const dispatch = useDispatch()
   
   return (
