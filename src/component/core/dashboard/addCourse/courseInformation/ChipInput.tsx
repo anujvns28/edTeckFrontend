@@ -1,47 +1,79 @@
-import React, { useEffect, useState } from 'react'
-import {MdClose} from "react-icons/md"
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { MdClose } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { rootState } from "../../../../../reducer";
+import {
+  UseFormRegister,
+  UseFormSetValue,
+  FieldErrors,
+} from "react-hook-form";
 
-const ChipInput = ({label,name,placeholder,register,setValue,errors}) => {
-  const [tags,setTags] = useState([]);
-  const {course,editCourse} = useSelector((state) => state.course);
+type FormData = {
+  [key: string]: string[];
+};
 
-  const handleKeyDown = (e) => {
-   if(e.key === "Enter" || e.key === ","){
-    e.preventDefault();
-     const tag = e.target.value.trim()
-     if(!tags.includes(tag) && tag){
-      let tagValues = [];
-      tagValues = [...tags,tag];
-      setTags(tagValues)
-      e.target.value = ''
-     }
-   }
-  }
+type ChipInputProps = {
+  label: string;
+  name: string;
+  placeholder?: string;
+  register: UseFormRegister<FormData>;
+  setValue: UseFormSetValue<FormData>;
+  errors: FieldErrors<FormData>;
+};
 
-  const handleDeleteChip = (index) => {
-  const newTags = [...tags]
-  newTags.splice(index,1)
-  console.log(newTags,"this is new tags")
-  setTags(newTags)
-  }
+const ChipInput = ({
+  label,
+  name,
+  placeholder,
+  register,
+  setValue,
+  errors,
+}: ChipInputProps) => {
+  
+  const [tags, setTags] = useState<string[]>([]);
+  const { course, editCourse } = useSelector((state: rootState) => state.course);
 
-  useEffect(() => {
-    register(name,{required:true})
-    if(editCourse){
-      setTags(course.tag)
+ 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+
+      const value = e.currentTarget.value.trim();
+
+      if (value && !tags.includes(value)) {
+        const updatedTags = [...tags, value];
+        setTags(updatedTags);
+        e.currentTarget.value = "";
+      }
     }
-  },[])
+  };
 
+  
+  const handleDeleteChip = (index: number) => {
+    const newTags = tags.filter((_, i) => i !== index);
+    setTags(newTags);
+  };
+
+  
   useEffect(() => {
-   setValue(name,tags)
-  },[tags])
+    register(name, { required: true });
+
+    if (editCourse && course?.tag) {
+      setTags(course.tag as string[]);
+    }
+  }, [register, name, editCourse, course]);
+
+  
+  useEffect(() => {
+    setValue(name, tags);
+  }, [tags, setValue, name]);
 
   return (
     <div>
-      <label className="text-sm text-richblack-5" htmlFor="coursePrice">
-       {label} <sup className="text-pink-200">*</sup>
+      <label className="text-sm text-richblack-5">
+        {label} <sup className="text-pink-200">*</sup>
       </label>
+
       <div className="flex w-full flex-wrap gap-y-2">
         {tags.map((chip, index) => (
           <div
@@ -58,20 +90,22 @@ const ChipInput = ({label,name,placeholder,register,setValue,errors}) => {
             </button>
           </div>
         ))}
+
         <input
-       className='form-style'
-       placeholder={placeholder}
-       name={name}
-       onKeyDown={handleKeyDown}
-      />
+          className="form-style"
+          placeholder={placeholder}
+          name={name}
+          onKeyDown={handleKeyDown}
+        />
       </div>
-      {errors[name] && (
+
+      {errors[name as keyof FormData] && (
         <span className="ml-2 text-xs tracking-wide text-pink-200">
           {label} is required
         </span>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ChipInput
+export default ChipInput;

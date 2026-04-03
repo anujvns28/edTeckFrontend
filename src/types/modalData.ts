@@ -13,7 +13,7 @@ export type SubSectionModaldata = {
   lectureStatusText : string,
   view?:boolean,
   sectionId:string,
-  subsectionData:Subsection,
+  subsectionData:Subsection | null,
   edit?:boolean,
-  add:boolean
+  add?:boolean
 }

@@ -8,32 +8,38 @@ import {AiFillCaretDown} from "react-icons/ai"
 import ConfirmationModal from '../../../../common/ConfirmationModal'
 import { deleteSection, deleteSubSection } from '../../../../../service/operation/Course'
 import { setCourse } from '../../../../../slices/courseSlice'
-import { setToken } from '../../../../../slices/authSlice'
 import SubSectionModal from './SubSectionModal'
+import { rootState } from '../../../../../reducer'
+import { ModalData, SubSectionModaldata } from '../../../../../types/modalData'
+import { Course } from '../../../../../types/course'
 
+type EditSectionInfromationProps = {
+  editSectionInformation:(sectionName:string,sectionId:string) => void
+}
 
-const NestedView = ({editSectionInformation}) => {
-  const {course} = useSelector((state) => state.course);
+const NestedView = ({editSectionInformation}:EditSectionInfromationProps) => {
+  const {course} = useSelector((state:rootState) => state.course);
 
-  const [modalData,setModalData] = useState();
-  const [subSectionModal,setSubSectionModal] = useState();
-  const {token} = useSelector((state) => state.auth)
+  const [modalData,setModalData] = useState<ModalData | null>(null);
+  const [subSectionModal,setSubSectionModal] = useState<SubSectionModaldata | null>(null);
+  const {token} = useSelector((state:rootState) => state.auth)
   const dispatch = useDispatch();
 
-  const handleDeleteSection = async(sectionId) => {
-   const result = await deleteSection({
-    sectionId:sectionId,
-    courseId:course._id
-   },token
-   )
+  const handleDeleteSection = async(sectionId:string) => {
+    if(!course || !token) return;
+    const result = await deleteSection({
+      sectionId:sectionId,
+      courseId:course._id
+    },token)
 
    if(result){
-    dispatch(setCourse(result))
+    dispatch(setCourse(result.data))
     setModalData(null)
    }
   }
 
-  const handleDeleteSubSection = async(sectionId,sebSectionId)=>{
+  const handleDeleteSubSection = async(sectionId:string,sebSectionId:string)=>{
+    if(!token) return;
     const result = await deleteSubSection({
       sectionId:sectionId,
       subSectionId:sebSectionId
@@ -42,12 +48,12 @@ const NestedView = ({editSectionInformation}) => {
 
     setModalData(null)
 
-    if(result){
+    if(result && course){
       const updateSection = course.courseContent.map((section) =>
-            section._id === result._id ?  result : section
+            section._id === result.data._id ?  result : section
             )
             const updateCourse = {...course,courseContent:updateSection}
-            dispatch(setCourse(updateCourse))
+            dispatch(setCourse(updateCourse as Course))
     }
   }
 
@@ -102,7 +108,8 @@ const NestedView = ({editSectionInformation}) => {
                     lectureStatusText : "Viewing",
                     view:true,
                     sectionId:section._id,
-                    subsectionData:data
+                    subsectionData:data,
+                    
                   })}
                   className="flex items-center gap-x-3 py-2 ">
                     <RxDropdownMenu className="text-2xl text-richblack-50" />
@@ -117,7 +124,6 @@ const NestedView = ({editSectionInformation}) => {
                     onClick={() => setSubSectionModal({
                       lectureStatusText : "Editing",
                       edit:true,
-                      // subsection data in sectionId
                       sectionId:section._id,
                       subsectionData:data
                     })}
@@ -144,7 +150,8 @@ const NestedView = ({editSectionInformation}) => {
                onClick={() => setSubSectionModal({
                 lectureStatusText:"Adding",
                 add:true,
-                sectionId:section._id
+                sectionId:section._id,
+                subsectionData: null
                })}
                 className="mt-3 flex items-center gap-x-1 text-yellow-50"
               >

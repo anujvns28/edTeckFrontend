@@ -9,6 +9,7 @@ const InstructorSection = () => {
         <div className='w-11/12 py-20 max-w-maxContent mx-auto gap-20 flex flex-row justify-between'>
             <div className='w-[50%]'>
                 <img src={image}
+                alt='imageva'
                  className="shadow-white shadow-[-20px_-20px_0_0]"
                 />
             </div>

@@ -2,7 +2,7 @@ import React from 'react'
 
 
 type HighlightTextProps = {
-  text: string
+  text: string 
 }
 
 const HighlightText = ({text}:HighlightTextProps) => {

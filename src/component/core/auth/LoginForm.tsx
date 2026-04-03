@@ -24,13 +24,23 @@ const LoginFrom = () => {
     }))
   }
 
-  const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login(formData, navigate, dispatch);
-  }
+
+    if (!formData.email || !formData.password) {
+      return;
+    }
+
+    try {
+      await login(formData, navigate, dispatch);
+    } catch (error) {
+      console.error(error);
+    }
+};
 
   return (
     <form
+      noValidate
       onSubmit={handleSubmit}
       className="mt-6 flex w-full flex-col gap-y-4"
     >

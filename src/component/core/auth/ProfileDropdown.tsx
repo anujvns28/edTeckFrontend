@@ -5,11 +5,11 @@ import {VscDashboard} from "react-icons/vsc"
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../../service/operation/Auth'
-import { RootState } from '../../..'
+import { AppDispatch, RootState } from '../../..'
 
 const ProfileDropdown = () => {
     const {user} = useSelector((state:RootState) => state.profile);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const openRef = useRef<HTMLDivElement | null>(null);
 
@@ -18,7 +18,7 @@ const ProfileDropdown = () => {
     
     useEffect(() =>{
       const handleClick = (e:MouseEvent) => {
-        if(openRef.current !== e.target ){
+        if(openRef.current !== e.target as Node ){
           setOpen(false)
         }else{
           return
@@ -31,8 +31,6 @@ const ProfileDropdown = () => {
         window.removeEventListener("click",handleClick);
       }
     },[])
-
-    
 
   return (
     <button className='relative' onClick={() => setOpen(true)}>

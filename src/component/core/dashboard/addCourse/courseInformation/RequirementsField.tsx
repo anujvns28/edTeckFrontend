@@ -1,57 +1,99 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { rootState } from "../../../../../reducer";
+import {
+  UseFormRegister,
+  UseFormSetValue,
+  FieldErrors,
+} from "react-hook-form";
 
-const RequirementsField = ({label,name,register,setValue,errors}) => {
-  const [requirement,setRequirement] = useState();
-  const [requirementList,setRequirementList] = useState([]);
-  const {editCourse,course} = useSelector((state) => state.course);
+//  Form type
+type FormData = {
+  [key: string]: string[];
+};
 
-  const handleClck = (e) => {
-    e.preventDefault()
-    if(requirement){
-      let arr = [...requirementList,requirement]
-      setRequirementList(arr);
-    }
-  }
+type RequirementsFieldProps = {
+  label: string;
+  name: string;
+  register: UseFormRegister<FormData>;
+  setValue: UseFormSetValue<FormData>;
+  errors: FieldErrors<FormData>;
+};
 
-  const handleRemoveRequirement = (index) => {
-   let arr = [...requirementList]
-   arr.splice(index,1)
-   setRequirementList(arr);
-  }
-
-  useEffect(() => {
-    register(name,{required:true})
-    if(editCourse){
-      setRequirementList(course.instructions)
-    }
-  },[])
+const RequirementsField = ({
+  label,
+  name,
+  register,
+  setValue,
+  errors,
+}: RequirementsFieldProps) => {
   
+  const [requirement, setRequirement] = useState<string>("");
+  const [requirementList, setRequirementList] = useState<string[]>([]);
+
+  const { editCourse, course } = useSelector(
+    (state: rootState) => state.course
+  );
+
+  //  add requirement
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const value = requirement.trim();
+
+    if (value && !requirementList.includes(value)) {
+      setRequirementList((prev) => [...prev, value]);
+      setRequirement(""); // clear input
+    }
+  };
+
+  //  remove requirement
+  const handleRemoveRequirement = (index: number) => {
+    const updated = requirementList.filter((_, i) => i !== index);
+    setRequirementList(updated);
+  };
+
+  // register + edit mode
   useEffect(() => {
-     setValue(name,requirementList)
-  },[requirementList])
+    register(name, { required: true });
+
+    if (editCourse && course?.instructions) {
+      setRequirementList(course.instructions as string[]);
+    }
+  }, [register, name, editCourse, course]);
+
+  // sync with react-hook-form
+  useEffect(() => {
+    setValue(name, requirementList);
+  }, [requirementList, setValue, name]);
 
   return (
     <div>
-       <label className="text-sm text-richblack-5" htmlFor={name}>
+      <label className="text-sm text-richblack-5" htmlFor={name}>
         {label} <sup className="text-pink-200">*</sup>
       </label>
+
       <div className="flex flex-col items-start space-y-2">
         <input
           type="text"
           id={name}
-          onChange={(e) => setRequirement(e.target.value.trim())}
+          value={requirement}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setRequirement(e.target.value)
+          }
           className="form-style w-full"
         />
+
         <button
-          onClick={handleClck}
+          type="button"
+          onClick={handleClick}
           className="font-semibold text-yellow-50"
         >
           Add
         </button>
       </div>
 
-      {errors[name] && (
+      {errors[name as keyof FormData] && (
         <span className="ml-2 text-xs tracking-wide text-pink-200">
           {label} is required
         </span>
@@ -59,12 +101,12 @@ const RequirementsField = ({label,name,register,setValue,errors}) => {
 
       {requirementList.length > 0 && (
         <ul className="mt-2 list-inside list-disc">
-          {requirementList.map((requirement, index) => (
+          {requirementList.map((item, index) => (
             <li key={index} className="flex items-center text-richblack-5">
-              <span>{requirement}</span>
+              <span>{item}</span>
               <button
                 type="button"
-                className="ml-2 text-xs text-pure-greys-300 "
+                className="ml-2 text-xs text-pure-greys-300"
                 onClick={() => handleRemoveRequirement(index)}
               >
                 clear
@@ -73,9 +115,8 @@ const RequirementsField = ({label,name,register,setValue,errors}) => {
           ))}
         </ul>
       )}
-       
     </div>
-  )
-}
+  );
+};
 
-export default RequirementsField
+export default RequirementsField;

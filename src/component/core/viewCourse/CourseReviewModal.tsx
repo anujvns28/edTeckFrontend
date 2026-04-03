@@ -5,26 +5,37 @@ import IconButton from '../../common/IconButton'
 import { useForm } from 'react-hook-form'
 import ReactStars from "react-rating-stars-component";
 import { createRating } from '../../../service/operation/Course'
+import { rootState } from '../../../reducer'
 
+type CourseReviewModalType = {
+  setReviewModal:(data:boolean) => void 
+  courseId:string
+}
 
-const CourseReviewModal = ({setReviewModal,courseId}) => {
-    const {register,handleSubmit,formState:{errors},setValue,getValues} = useForm();
-    const {user} = useSelector((state) => state.profile)
-    const {token} = useSelector((state) => state.auth)
+type ReviewFormData = {
+  courseRating: number;
+  courseExperience: string;
+};
 
-    const onSubmit = async(data) => {
-     const reviewData = {
-        courseId : courseId,
-        rating:data.courseRating,
-        review:data.courseExperience
-     }
-    await createRating(reviewData,token)
-    setReviewModal(false)
-     console.log(reviewData,"this is data")
+const CourseReviewModal = ({setReviewModal,courseId}:CourseReviewModalType) => {
+    const {register,handleSubmit,formState:{errors},setValue} = useForm<ReviewFormData>();
+    const {user} = useSelector((state:rootState) => state.profile)
+    const {token} = useSelector((state:rootState) => state.auth)
+
+    const onSubmit = async(data:ReviewFormData) => {
+      if(token){
+        const reviewData = {
+          courseId : courseId,
+          rating:data.courseRating,
+          review:data.courseExperience
+      }
+
+      await createRating(reviewData,token)
+      setReviewModal(false)
+    }
     }
 
-    const ratingChanged = (newRating) => {
-        console.log(newRating);
+    const ratingChanged = (newRating:number) => {
         setValue('courseRating',newRating)
     }
 
